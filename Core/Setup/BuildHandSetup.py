@@ -1,5 +1,5 @@
-from RiggingSystem.Core.BuildWorld import buildWorld
-from RiggingSystem.Utils.CharUtilsLib import *
+from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Utils.CharUtilsLib import *
 
 def buildHandSetup(name,
                    side,

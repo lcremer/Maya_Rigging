@@ -1,8 +1,8 @@
 import pymel.core as pc
-from RiggingSystem.Core.Dummy.DummyBuild import DummyBuild
-from RiggingSystem.Core import ModuleSymmetryLib as ms
+from Maya_Rigging.Core.Dummy.DummyBuild import DummyBuild
+from Maya_Rigging.Core import ModuleSymmetryLib as ms
 
-# from RiggingSystem import *
+# from Maya_Rigging import *
 
 def bipedModuleTemplate(name, spineCount, neckCount, finger, numFinger, toe, numToe):
     # spine

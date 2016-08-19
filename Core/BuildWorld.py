@@ -1,7 +1,7 @@
 import pymel.core as pc
 
-from RiggingSystem.Utils import CurveUtilLib as cuUL
-from RiggingSystem.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Utils import CurveUtilLib as cuUL
+from Maya_Rigging.Utils import CharUtilsLib as chUL
 
 def buildWorld(name, scale, controlColor = ''):
     worldAControl = [(name + 'worldA_ctrl')]

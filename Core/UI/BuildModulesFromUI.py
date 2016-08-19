@@ -1,12 +1,12 @@
 import pymel.core as pc
 
 from ...Utils.CharUtilsLib import rigSideSep
-from RiggingSystem.Core.Dummy.DummyBuild import DummyBuild
+from Maya_Rigging.Core.Dummy.DummyBuild import DummyBuild
 from ..ModuleSymmetryLib import buildBodyModuleSymmetry
 from ..ModuleSymmetryLib import buildLegModuleSymmetry
 from ..ModuleSymmetryLib import buildArmModuleSymmetry
-from RiggingSystem.Core import ModuleTemplates as mt
-from RiggingSystem.Core import ModuleSymmetryLib as msLib
+from Maya_Rigging.Core import ModuleTemplates as mt
+from Maya_Rigging.Core import ModuleSymmetryLib as msLib
 
 
 def buildArmDummySkeletonModulePreCMD():

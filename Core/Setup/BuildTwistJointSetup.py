@@ -1,10 +1,10 @@
 import pymel.core as pc
 import re
 
-from RiggingSystem.Utils import AttrUtil as atu
+from Maya_Rigging.Utils import AttrUtil as atu
 from ...Utils import *
-from RiggingSystem.Utils.CharUtilsLib import *
-from RiggingSystem.Core import JointStretchNetworkLib as js
+from Maya_Rigging.Utils.CharUtilsLib import *
+from Maya_Rigging.Core import JointStretchNetworkLib as js
 
 def buildTwistJointSetup(name, side, joint, stretchType, ikFkType, rotConnect, wristJoint, controller, stretch, volume, scale, controlColor = ''):
     transNode = []

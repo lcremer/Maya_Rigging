@@ -1,6 +1,6 @@
 import pymel.core as pc
-from RiggingSystem.Utils import CurveUtilLib as cuLib
-from RiggingSystem.Utils import CharUtilsLib as charLib
+from Maya_Rigging.Utils import CurveUtilLib as cuLib
+from Maya_Rigging.Utils import CharUtilsLib as charLib
 
 def createDummyBone(name, side, startDummyJoint, endDummyJoint):
 

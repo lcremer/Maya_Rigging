@@ -1,9 +1,9 @@
-from RiggingSystem.Core import JointStretchNetworkLib as js
-from RiggingSystem.Core.BuildWorld import buildWorld
-from RiggingSystem.Core.Setup import BuildSpaceSwitchSetup as bsss
-from RiggingSystem.Core.Setup import BuildTwistJointSetup as btjs
-from RiggingSystem.Utils import AttrUtil as atu
-from RiggingSystem.Utils.CharUtilsLib import *
+from Maya_Rigging.Core import JointStretchNetworkLib as js
+from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsss
+from Maya_Rigging.Core.Setup import BuildTwistJointSetup as btjs
+from Maya_Rigging.Utils import AttrUtil as atu
+from Maya_Rigging.Utils.CharUtilsLib import *
 
 def buildBipedLegSetup(name,
                        side,

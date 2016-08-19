@@ -1,20 +1,20 @@
 import pymel.core as pc
 
 import ModuleTemplateBuilderUI as modB
-from RiggingSystem.Utils import AttrUtil as atu
-from RiggingSystem.Core.Setup import BuildArmSetup as bas
-from RiggingSystem.Core.Setup import BuildBipedLegSetup as bbls
-from RiggingSystem.Core.Setup import BuildQuadLegSetup as bqls
-from RiggingSystem.Core.Setup import BuildSpineSetup as bss
-from RiggingSystem.Core.Setup import BuildEyeSetup as bes
-from RiggingSystem.Core.Setup import BuildHandSetup as bhs
-from RiggingSystem.Core.Setup import BuildNeckHeadSetup as bnhs
-from RiggingSystem.Core.Setup import BuildSpaceSwitchSetup as bsps
-from RiggingSystem.Core.Setup import BuildTentacleSetup as bts
+from Maya_Rigging.Utils import AttrUtil as atu
+from Maya_Rigging.Core.Setup import BuildArmSetup as bas
+from Maya_Rigging.Core.Setup import BuildBipedLegSetup as bbls
+from Maya_Rigging.Core.Setup import BuildQuadLegSetup as bqls
+from Maya_Rigging.Core.Setup import BuildSpineSetup as bss
+from Maya_Rigging.Core.Setup import BuildEyeSetup as bes
+from Maya_Rigging.Core.Setup import BuildHandSetup as bhs
+from Maya_Rigging.Core.Setup import BuildNeckHeadSetup as bnhs
+from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsps
+from Maya_Rigging.Core.Setup import BuildTentacleSetup as bts
 
-from RiggingSystem.Utils import CharUtilsLib as chUL
-from RiggingSystem.Utils import List
-from RiggingSystem.Utils.String import *
+from Maya_Rigging.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Utils import List
+from Maya_Rigging.Utils.String import *
 
 def createRig(ikfk='',
               stretch='',

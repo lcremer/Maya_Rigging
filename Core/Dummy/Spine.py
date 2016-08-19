@@ -1,7 +1,7 @@
 import pymel.core as pc
 from Util import *
-from RiggingSystem.Utils import List
-from RiggingSystem.Utils import DummyUtil as dU
+from Maya_Rigging.Utils import List
+from Maya_Rigging.Utils import DummyUtil as dU
 
 def Spine(name, side, moduleName, numCon, axis, dis, colorIndex):
     print('building Spine Dummy Skeleton Module')

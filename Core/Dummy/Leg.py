@@ -1,7 +1,7 @@
 import pymel.core as pc
 from Util import *
 from Fingers import createFingers
-from RiggingSystem.Utils import DummyUtil as dU
+from Maya_Rigging.Utils import DummyUtil as dU
 
 def LegBiped(name, side, numJoints, fingers, numFingers, numSegment, colorIndex):
     list = ''

@@ -4,7 +4,7 @@ import BuildModuleJointSkeletonLib as bSkelLib
 from ..Utils import List as List
 from ..Utils.String import objGetPrefix
 
-# from RiggingSystem import *
+# from Maya_Rigging import *
 
 #buildModuleJointSkeletonLib
 #charUtilsLib

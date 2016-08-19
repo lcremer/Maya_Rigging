@@ -2,7 +2,7 @@ import pymel.core as pc
 
 from ..Utils import CharUtilsLib as charLib
 from ..Utils import List as List
-from RiggingSystem.Core.Dummy import Util
+from Maya_Rigging.Core.Dummy import Util
 # from ..Utils.CharUtilsLib import charLib.lockAndHide
 
 # moduleSymmetryConnect l_footPlacer_loc r_footPlacer_loc

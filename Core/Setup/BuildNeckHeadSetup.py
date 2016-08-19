@@ -1,6 +1,6 @@
 import pymel.core as pc
 from BuildSpaceSwitchSetup import buildSpaceSwitchSetup
-from RiggingSystem.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.BuildWorld import buildWorld
 from ..JointStretchNetworkLib import buildIkStretch
 from ..JointStretchNetworkLib import stretchySpline
 from ...Utils.CharUtilsLib import addSkinJointToSet

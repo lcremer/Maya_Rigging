@@ -1,8 +1,8 @@
 import pymel.core as pc
 from Util import *
 from Fingers import createFingers
-from RiggingSystem.Utils import DummyUtil as dU
-from RiggingSystem.Core import ModuleSymmetryLib as modSymLib
+from Maya_Rigging.Utils import DummyUtil as dU
+from Maya_Rigging.Core import ModuleSymmetryLib as modSymLib
 
 def Arm(name, side, numJoints, fingers, numFingers, numSegment, colorIndex):
     elementsList = ''

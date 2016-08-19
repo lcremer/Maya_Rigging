@@ -2,15 +2,19 @@ from PySide import QtGui, QtCore
 from maya.app.general.mayaMixin import MayaQDockWidget
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
-from RiggingSystem.Core import ModuleSymmetryLib as msLib
-from RiggingSystem.Core import BuildModuleJointSkeleton as bmjs
-from RiggingSystem.Core.UI import CreateModuleRigFromUI as cmr
-from RiggingSystem.Core import ModuleTemplates as mt
+from Maya_Rigging.Core import ModuleSymmetryLib as msLib
+from Maya_Rigging.Core import BuildModuleJointSkeleton as bmjs
+from Maya_Rigging.Core.UI import CreateModuleRigFromUI as cmr
+from Maya_Rigging.Core import ModuleTemplates as mt
 
 from CollapsibleButton import CollapsibleButton
 from ColorSpinBox import ColorSpinBox
-from Utils.UI import getMayaWindow
+from Maya_UtilLib.UI import getMayaWindow
 from Util import rigSideSep
+
+
+def Open(*args):
+    UI()
 
 
 class UI(MayaQWidgetDockableMixin, QtGui.QDialog):

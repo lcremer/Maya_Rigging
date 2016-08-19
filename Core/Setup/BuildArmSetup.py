@@ -1,12 +1,12 @@
-from RiggingSystem.Core import BuildWorld as bw
-from RiggingSystem.Core import JointStretchNetworkLib as js
-from RiggingSystem.Core.Setup import BuildSpaceSwitchSetup as bsss
-from RiggingSystem.Core.Setup import BuildTwistJointSetup as btjs
-from RiggingSystem.Utils import AttrUtil as atu
-from RiggingSystem.Utils import CharUtilsLib as chUL
-from RiggingSystem.Utils import CurveUtilLib as cuUL
-from RiggingSystem.Utils import Transform as tr
-from RiggingSystem.Utils.CharUtilsLib import *
+from Maya_Rigging.Core import BuildWorld as bw
+from Maya_Rigging.Core import JointStretchNetworkLib as js
+from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsss
+from Maya_Rigging.Core.Setup import BuildTwistJointSetup as btjs
+from Maya_Rigging.Utils import AttrUtil as atu
+from Maya_Rigging.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Utils import CurveUtilLib as cuUL
+from Maya_Rigging.Utils import Transform as tr
+from Maya_Rigging.Utils.CharUtilsLib import *
 
 def buildArmSetup(name,
                   side,

@@ -2,12 +2,12 @@
 
 import CreateModuleRigFromUI as cRig
 import BuildModulesFromUI as bm
-from RiggingSystem.Core import AutoRig as ar
-from RiggingSystem.Utils import AttrUtil as atu
-from RiggingSystem.Utils import CurveUtil as cu
-from RiggingSystem.Utils import CharUtilsLib as chUL
-from RiggingSystem.Core import ModuleSymmetryLib as msL
-from RiggingSystem.Core import BuildModuleJointSkeleton as bmjs
+from Maya_Rigging.Core import AutoRig as ar
+from Maya_Rigging.Utils import AttrUtil as atu
+from Maya_Rigging.Utils import CurveUtil as cu
+from Maya_Rigging.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Core import ModuleSymmetryLib as msL
+from Maya_Rigging.Core import BuildModuleJointSkeleton as bmjs
 
 def ModuleTemplateUI():
     if pc.window('moduleTemplatesWin',exists=True):

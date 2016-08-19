@@ -1,6 +1,6 @@
 import pymel.core as pc
 
-# from RiggingSystem import *
+# from Maya_Rigging import *
 
 def stretchNetworkUI():
     if pc.window('ikStretchWin',exists=True):

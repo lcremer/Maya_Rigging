@@ -1,9 +1,9 @@
 import pymel.core as pc
 
-from RiggingSystem.Core import BuildWorld as bw
-from RiggingSystem.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Core import BuildWorld as bw
+from Maya_Rigging.Utils import CharUtilsLib as chUL
 
-# from RiggingSystem import *
+# from Maya_Rigging import *
 
 #	This proc creates stretch network for given joints.
 #	code based on Gregory Smith's gsCreateSS.

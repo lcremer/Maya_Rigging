@@ -1,7 +1,7 @@
 import pymel.core as pc
 from Util import *
-from RiggingSystem.Utils import List
-from RiggingSystem.Utils import DummyUtil as dU
+from Maya_Rigging.Utils import List
+from Maya_Rigging.Utils import DummyUtil as dU
 
 def Tentacle(name, side, moduleName, numCon, axis, dis, colorIndex):
     tentaclePlacer = linearDisDummyBoneCreator(name, side, moduleName, numCon, axis, dis, colorIndex)

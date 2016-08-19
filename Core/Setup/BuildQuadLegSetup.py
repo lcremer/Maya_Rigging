@@ -1,14 +1,14 @@
 import re
 
 import pymel.core as pc
-from RiggingSystem.Core import JointStretchNetworkLib as js
-from RiggingSystem.Core.BuildModuleJointSkeletonLib import orientJoints
-from RiggingSystem.Core import BuildWorld as bw
-from RiggingSystem.Core.Setup.BuildSpaceSwitchSetup import buildSpaceSwitchSetup
-from RiggingSystem.Core.Setup.BuildTwistJointSetup import buildTwistJointSetup
-from RiggingSystem.Utils import CharUtilsLib as chUL
-from RiggingSystem.Utils import CurveUtilLib as cuUL
-from RiggingSystem.Utils import List
+from Maya_Rigging.Core import JointStretchNetworkLib as js
+from Maya_Rigging.Core.BuildModuleJointSkeletonLib import orientJoints
+from Maya_Rigging.Core import BuildWorld as bw
+from Maya_Rigging.Core.Setup.BuildSpaceSwitchSetup import buildSpaceSwitchSetup
+from Maya_Rigging.Core.Setup.BuildTwistJointSetup import buildTwistJointSetup
+from Maya_Rigging.Utils import CharUtilsLib as chUL
+from Maya_Rigging.Utils import CurveUtilLib as cuUL
+from Maya_Rigging.Utils import List
 
 def buildQuadLegSetup(name,
                       side,

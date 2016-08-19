@@ -1,9 +1,9 @@
 import pymel.core as pc
 
 from Util import *
-from RiggingSystem.Utils import List
-from RiggingSystem.Utils import DummyUtil as dU
-from RiggingSystem.Core import ModuleSymmetryLib as modSymLib
+from Maya_Rigging.Utils import List
+from Maya_Rigging.Utils import DummyUtil as dU
+from Maya_Rigging.Core import ModuleSymmetryLib as modSymLib
 
 def Head(name, side, moduleName, colorIndex):
     dummyBoneGrp = ''

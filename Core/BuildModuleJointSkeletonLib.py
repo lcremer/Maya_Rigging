@@ -7,7 +7,7 @@ from ..Utils import AttrUtil as aU
 from ..Utils import List as List
 import BuildModuleJointSkeleton as bModSkel
 
-# from RiggingSystem import *
+# from Maya_Rigging import *
 
 #source 'snaps.mel'
 #charUtilsLib
