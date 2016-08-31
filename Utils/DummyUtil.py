@@ -2,6 +2,7 @@ import pymel.core as pc
 import CharUtilsLib as chUL
 import List
 
+
 def add_dummy_twist_joints_attr(placer, dummy_parent, dummy_child, count):
     attr_type = 'twistJoints'
     multi_divs = []

@@ -1,5 +1,4 @@
 import pymel.core as pc
-import re
 from ..Utils.String import objGetPrefix
 from ..Utils.CurveUtilLib import curveControl
 from ..Utils.String import strSearchReplace
@@ -7,21 +6,14 @@ from ..Utils import AttrUtil as aU
 from ..Utils import List as List
 import BuildModuleJointSkeleton as bModSkel
 
-# from Maya_Rigging import *
-
-#source 'snaps.mel'
-#charUtilsLib
-#curveUtilitiesLib
-#libString
 
 def buildTentacleSkeleton():
     jointsList = []
     jointNameList = []
     strip = ''
     grp = ''
-
     sel = pc.ls(sl=True)
-    if pc.attributeQuery('jointPosList',n=sel[0],ex=True):
+    if pc.attributeQuery('jointPosList', n=sel[0], ex=True):
         l = pc.getAttr(sel[0] + '.jointPosList')
         jointsList = List.seperate(l)
         for i in len(jointsList):
@@ -34,24 +26,16 @@ def buildTentacleSkeleton():
         pc.error('selected object is not installed for current operation')
 
 
-#string target[] = `ls -sl`
-#string names[] = {'a','b','c'}
-#string grp = 'null1'
-#createJointHierarchy target name grp
-
 def createJointHierarchy(targetPos, names, grp):
     # will create joint chain based on location of objects in targetPos,
     # rename them the names in aNames, and place the result in the existing group grp
     # returns new pathNames
-
     joints = []
-
-    if (len(targetPos) == len(names)):
+    if len(targetPos) == len(names):
         xForm = []
         jnt = ''
-
         for i in range(len(targetPos)):
-            if(targetPos[i]):
+            if targetPos[i]:
                 pc.select(cl=True)
                 xForm = pc.xform(targetPos[i], q=True, ws=True, rp=True)
                 jnt = pc.joint(p=(xForm[0],xForm[1],xForm[2]), n=names[i])
@@ -62,15 +46,13 @@ def createJointHierarchy(targetPos, names, grp):
                         jnt = pc.parent(jnt, w=True)
                 else:
                     jnt = pc.parent(jnt, joints[i-1])
-
                 joints.append(jnt[0])
                 pc.select(cl=True)
-
     pc.select(cl=True)
     return joints
 
-def buildTwistJoints(sel = ''):
 
+def buildTwistJoints(sel=''):
     if sel == '':
         sel = pc.ls(sl=True)
     twistJoints = {}
@@ -84,19 +66,17 @@ def buildTwistJoints(sel = ''):
                 twistJoints.update({(strip+'_jnt'): twistJointCount})
     else:
         pc.error('selected object is not installed for current operation')
-
     for t in twistJoints:
         aU.addTwistJointAttr('twistJoints', twistJoints[t], t)
 
-def buildSplineJoints(sel = ''):
 
+def buildSplineJoints(sel=''):
     if sel == '':
         sel = pc.ls(sl=True)
     twistJoints = {}
     if pc.attributeQuery('jointPosList', n=sel[0], ex=True):
         l = pc.getAttr(sel[0] + '.jointPosList')
         jointsList = List.seperate(l)
-
         for j in jointsList:
             strip = objGetPrefix(j)
             if pc.attributeQuery('twistJoints', n=j, ex=True):
@@ -104,42 +84,40 @@ def buildSplineJoints(sel = ''):
                 twistJoints.update({(strip + '_jnt'): twistJointCount})
     else:
         pc.error('selected object is not installed for current operation')
-
     for t in twistJoints:
         aU.addSplineJointAttrs('twistJoints', twistJoints[t], t)
+
 
 def buildJointSkeleton(grp):
     jointsList = []
     jointNameList = []
     strip = ''
     jointHierarchy = []
-
     sel = pc.ls(sl=True)
-
-    if pc.attributeQuery('jointPosList',n=sel[0],ex=True):
+    if pc.attributeQuery('jointPosList', n=sel[0], ex=True):
         l = pc.getAttr(sel[0] + '.jointPosList')
         jointsList = List.seperate(l)
         for j in jointsList:
             strip = objGetPrefix(j)
-            jointNameList.append(strip + '_jnt')        
-
+            jointNameList.append(strip + '_jnt')
         jointHierarchy = createJointHierarchy(jointsList, jointNameList, grp)
     else:
-        pc.error('selected object is not installed for current operation' )
-
+        pc.error('selected object is not installed for current operation')
     return jointHierarchy
+
 
 def makeRotAlignJointSetup(joint, rotValue):
     pc.select(joint, r=True)
     tempLoc = curveControl('loc','curve')
     pc.setAttr((tempLoc[0]+'.r'), (0,0,0))    
-    con = pc.parentConstraint(tempLoc[0], joint, mo=True, skipTranslate=['x','y','z'], weight=1)    
-    pc.setAttr((tempLoc[0]+'.r'), ((rotValue.x),(rotValue.y),(rotValue.z)))
+    con = pc.parentConstraint(tempLoc[0], joint, mo=True, skipTranslate=['x', 'y', 'z'], weight=1)
+    pc.setAttr((tempLoc[0]+'.r'), ((rotValue.x), (rotValue.y), (rotValue.z)))
     pc.delete(con,tempLoc[0])
     pc.makeIdentity(joint, apply=True, t=0, r=1, s=0)
 
+
 # orientJoints `ls -sl` xyz zup
-def orientJoints(joints,orientAxis,sao):
+def orientJoints(joints, orientAxis, sao):
     # orients joints.  orient is value of joint -orientJoint ('xyz') and sao is value of joint -sao ('zdown')	
     jnt =  ''
     relatives = []
@@ -152,11 +130,13 @@ def orientJoints(joints,orientAxis,sao):
         else:
             pc.setAttr((jnt+'.jointOrient'),(0,0,0))
 
+
 def stripSuffixToJnt(obj, attr):
     list = pc.getAttr(obj+'.'+attr)
     strip = objGetPrefix(list)
     newList = (strip + '_jnt')
     return newList
+
 
 def createMasterRigPartsHolder():
     masterRigPartsHolder = 'masterRigPartsHolder_node'
@@ -166,6 +146,7 @@ def createMasterRigPartsHolder():
         masterRigPartsHolder = pc.rename(masterRigPartsHolder,'masterRigPartsHolder_node')
 
     return masterRigPartsHolder
+
 
 def buildLegJointSkeleton(parent):
     hipJointHierarchy = [] 
@@ -283,6 +264,7 @@ def buildLegJointSkeleton(parent):
     buildTwistJoints(s)
     pc.delete(sel[0])
 
+
 # buildArmJointSkeleton ''
 def buildArmJointSkeleton(parent):
     armJointList = ''
@@ -397,6 +379,7 @@ def buildArmJointSkeleton(parent):
     pc.delete(armJointListArray[0])
     pc.delete(sel[0])
 
+
 def createChildAttrJointHierarchy(joint):
     # this proc find child attr on main placer ctrl and create joint heirarchy..
  
@@ -414,6 +397,7 @@ def createChildAttrJointHierarchy(joint):
     else:
         pc.error('Given object is not installed for current operation')
     return jointHierarchy
+
 
 def buildSpineJointSkeleton(parent):
     sel = pc.ls(sl=True)
@@ -577,15 +561,14 @@ def buildNeckHeadJointSkeleton(parent):
 
 def buildTentacleJointSkeleton(parent):
     sel = pc.ls(sl=True)
-    s = sel
     tentacleJoints = []
     rigParts = ''
     node = ''
 
-    if len(sel)>0:
+    if len(sel) > 0:
         if not pc.attributeQuery('symmetry', n=sel[0], ex=True):
             tentRot = pc.getAttr(sel[0]+'.r')
-            pc.setAttr((sel[0]+'.r'),(0,0,0))
+            pc.setAttr((sel[0]+'.r'), (0, 0, 0))
 
             # creating tentacle joints
             tentacleJoints = buildJointSkeleton(parent)
@@ -599,14 +582,8 @@ def buildTentacleJointSkeleton(parent):
             name = pc.getAttr(sel[0]+'.name')
             side = pc.getAttr(sel[0]+'.side')
             moduleName = pc.getAttr(sel[0]+'.'+side+'types')
-            print('sel: ')
-            print(sel)
-            startJoint = stripSuffixToJnt(sel[0],(side+'startJoint'))
-            print('startJoint: ')
-            print(startJoint)
-            endJoint = stripSuffixToJnt(sel[0],(side+'endJoint'))
-            print('endJoint: ')
-            print(endJoint)
+            startJoint = stripSuffixToJnt(sel[0], (side+'startJoint'))
+            endJoint = stripSuffixToJnt(sel[0], (side+'endJoint'))
 
             pc.addAttr(tentacleJoints[0], ln='name', dt='string')
             pc.setAttr((tentacleJoints[0] + '.name'), name, type='string')
@@ -628,7 +605,7 @@ def buildTentacleJointSkeleton(parent):
             doSymm = pc.getAttr(sel[0]+'.doSymmetry')
             symmSide = pc.getAttr(doSymm+'.side')
             mirrorSide = pc.getAttr(sel[0]+'.side')
-            mirrorJoints = pc.mirrorJoint(tentacleJoints[0], mirrorYZ=True, mirrorBehavior=True, searchReplace=[mirrorSide,symmSide])
+            mirrorJoints = pc.mirrorJoint(tentacleJoints[0], mirrorYZ=True, mirrorBehavior=True, searchReplace=[mirrorSide, symmSide])
             rigAttr = pc.getAttr(mirrorJoints[0]+'.tentacleRig')
             rigAttr = strSearchReplace(rigAttr, mirrorSide, symmSide)
             pc.setAttr((mirrorJoints[0] + '.tentacleRig'), rigAttr, type='string')
@@ -636,8 +613,7 @@ def buildTentacleJointSkeleton(parent):
             
             rigParts = pc.getAttr(node + '.tentacleRigParts')
             pc.setAttr((node + '.tentacleRigParts'), (str(rigParts or '')+' '+mirrorJoints[0]), type='string')
-        pc.delete(sel[0])
     else:
-        pc.error('No object is selected, plz try again...')
+        pc.error('No object is selected, try again...')
 
-    buildSplineJoints(s)
+    buildSplineJoints(sel)

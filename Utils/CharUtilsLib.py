@@ -6,9 +6,10 @@ import List as List
 
 from String import *
 from Transform import *
-from CurveUtilLib import  * # TODO: clean this up
+from CurveUtilLib import * # TODO: clean this up
 
-def dupId(n,prePost,id):
+
+def dupId(n, prePost, id):
     newDup = []
     sel = []
     shortName = []
@@ -51,7 +52,8 @@ def reverseArray(array):
     reversedArray = c    
     return reversedArray
 
-def fkIkConnect(jnt,IK,FK,type,controller):    
+
+def fkIkConnect(jnt, IK, FK, type, controller):
     if not pc.attributeQuery('FK_IK', n=controller, ex=True):
         pc.addAttr(controller,ln='FK_IK',at='double',min=0,max=1,dv=1,keyable=True)
 
@@ -82,7 +84,8 @@ def fkIkConnect(jnt,IK,FK,type,controller):
     else:
         print('array of ik-fk does not match')
 
-def stretchTypeConnect(jnt,IK,FK,type,controller):
+
+def stretchTypeConnect(jnt, IK, FK, type, controller):
     if not pc.attributeQuery('FK_IK', n=controller, ex=True):
         pc.addAttr(controller,ln='FK_IK',at=double,min=0,max=1,dv=1,keyable=True)
 
@@ -117,6 +120,7 @@ def stretchTypeConnect(jnt,IK,FK,type,controller):
                 pc.connectAttr((scaleColorBlend + '.outputB'),(jnt[i] + '.scaleZ'),f=True)
                 pc.connectAttr((controller + '.FK_IK'),(scaleColorBlend + '.blender'),f=True)
 
+
 # create all needed fk ik connections for given joint
 #     INPUTS:
 #        jnt 			>> object to create fk ik connection ("joint1")
@@ -143,8 +147,9 @@ def listHierarchy(n):
 
     return fullchains
 
+
 # this proc will return hierarchy for selected joint
-def zoofindPolePosition(startJoint,midJoint,endJoint,dist):
+def zoofindPolePosition(startJoint, midJoint, endJoint, dist):
     temp = []
     joint2 = endJoint
     joint1 = ''
@@ -187,8 +192,9 @@ def zoofindPolePosition(startJoint,midJoint,endJoint,dist):
 
     return int
 
+
 # proc from zooToolBox
-def zooVectorProj(vecA,vecB):
+def zooVectorProj(vecA, vecB):
     a = vecA
     b = vecB
     magA = zooVectorMag(a)    
@@ -198,10 +204,12 @@ def zooVectorProj(vecA,vecB):
 
     return [vecA[0]*magA, vecA[1]*magA, vecA[2]*magA]
 
+
 # returns the vector found by projecting vecB onto vecA
 def zooVectorMag(vec):
     mag = pc.util.pow(vec[0], 2) + pc.util.pow(vec[1],2) + pc.util.pow(vec[2], 2)
     return pc.util.sqrt(mag)
+
 
 # This proc will create Fk controls for selecte joint
 #
@@ -211,7 +219,7 @@ def zooVectorMag(vec):
 #
 #		REQUIRES:     curveControl.mel, snap.mel
 #		(i.e) fkControl("joint1", "circleOrient")
-def fkControl(n,ctrlType,zeroOut, controlColor = ''):
+def fkControl(n, ctrlType, zeroOut, controlColor=''):
     sel = []
     FKCon = []
     FKAnim = []
@@ -240,9 +248,10 @@ def fkControl(n,ctrlType,zeroOut, controlColor = ''):
             pc.connectAttr(FKAnim[x]+'.scale', FKAnim[x+1]+'.inverseScale')
     return FKAnim
 
+
 # TODO: check that functions can be passed this way
 # to get different type of selection from selected objects
-def selectionType(type,cmd):
+def selectionType(type, cmd):
     select = pc.ls(sl=True)
     pc.select(cl=True)
     evenIndex = 0
@@ -262,6 +271,7 @@ def selectionType(type,cmd):
             oddIndex = odd
             cmd()
             print('/n'+oddIndex)
+
 
 # This little proc return child of selected joint
 def getChildJoint(n):
@@ -286,8 +296,7 @@ def getChildJoint(n):
 #			n 				= specified object or selected objects
 #			mode			= lock / unlock / locknHide
 #			channels        = specify channels "trans rot scale"
-
-def lockAndHide(n,mode,channels):
+def lockAndHide(n, mode, channels):
     flags = []
     sel = []
     if n == '':
@@ -344,6 +353,7 @@ def lockAndHide(n,mode,channels):
             elif f == 'vis':
                 pc.setAttr(n+'.v',lock=False,keyable=True)
 
+
 # This proc creates distance connection for specified joint
 def createDistance(startJoint, endJoint):
     result = []
@@ -374,8 +384,9 @@ def createDistance(startJoint, endJoint):
 
     return result
 
+
 # This little function return length joint chain
-def getChainLength(startJoint,endJoint):
+def getChainLength(startJoint, endJoint):
     temp = []
     dis = 0.0
     shape = []
@@ -393,7 +404,8 @@ def getChainLength(startJoint,endJoint):
             pc.delete(temp)
     return dis
 
-def getStretchAxis(obj,type):
+
+def getStretchAxis(obj, type):
     stretchAxis = []
     child = ''
     axis = pc.getAttr(obj+'.t')
@@ -419,7 +431,8 @@ def getStretchAxis(obj,type):
 
     return stretchAxis
 
-def findJointArray(startJoint,endJoint):
+
+def findJointArray(startJoint, endJoint):
 
     i = 1
     redFlag = 0
@@ -441,7 +454,8 @@ def findJointArray(startJoint,endJoint):
     result = reverseArray(fullChain)    
     return result
 
-def parentSkeletonTo(node,parent):
+
+def parentSkeletonTo(node, parent):
     i = 1
     redFlag = 0
     fullChain = []
@@ -461,6 +475,7 @@ def parentSkeletonTo(node,parent):
         i = i + 1
     pc.select(cl=True)
 
+
 def getTwistAxis(obj):
     twistAxis = []
     child = ''
@@ -479,7 +494,8 @@ def getTwistAxis(obj):
 
     return twistAxis
 
-def curveGuide(startPos,endPos):
+
+def curveGuide(startPos, endPos):
     nonScaleGrp = 'non_scale_grp'
     partGrp = 'curveGuide_grp'
     posA = pc.xform(startPos,q=True,worldSpace=True,rotatePivot=True)
@@ -506,7 +522,8 @@ def curveGuide(startPos,endPos):
     pc.parent(curve,partGrp)
     return curve
 
-def jointCurve(startJoint,endJoint):
+
+def jointCurve(startJoint, endJoint):
     noJoint = findJointArray(startJoint, endJoint)
     cvPos = []
     for j in noJoint:        
@@ -516,33 +533,37 @@ def jointCurve(startJoint,endJoint):
     pc.rebuildCurve(curve, ch=0, rpo=1, rt=0, end=1, kr=2, kcp=0, kep=1, kt=0, s=0, d=3, tol=0.01)
     return curve
 
-def jointsOnCurve(curve,orientAxis,upAxis,numJoints,name):
+
+def jointsOnCurve(curve, orientAxis, upAxis, numJoints, name):
     pc.select(cl=True)    
-    curveInfo = pc.pointOnCurve(curve,ch=True)
-    pc.setAttr(curveInfo+'.turnOnPercentage',1)
+    curveInfo = pc.pointOnCurve(curve, ch=True)
+    pc.setAttr(curveInfo+'.turnOnPercentage', 1)
 
     i = 0
     joints = []
     for i in range(numJoints+1):
         parameter = i * (1.0/numJoints)
-        pc.setAttr(curveInfo+'.parameter',parameter)
+        pc.setAttr(curveInfo+'.parameter', parameter)
         position = pc.getAttr(curveInfo+'.position')        
-        joints.append(pc.joint(n=(name + str(i+1) + '_jnt'),p=position))
+        joints.append(pc.joint(n=(name + str(i+1) + '_jnt'), p=position))
     pc.delete(curveInfo)
-    pc.joint(joints,e=True,oj=orientAxis,secondaryAxisOrient=upAxis,ch=True,zso=True)
+    pc.joint(joints, e=True, oj=orientAxis, secondaryAxisOrient=upAxis, ch=True, zso=True)
     return joints
+
 
 def getParent(object):    
     parent = pc.listRelatives(object,parent=True)
     return parent;    
 
-def transferConnection(master,slave,attr):
+
+def transferConnection(master, slave, attr):
     transConnection = pc.listConnections(master+'.'+attr, d=False, s=True, plugs=True, skipConversionNodes=False)
     if transConnection:        
         pc.connectAttr(transConnection[0],slave+'.'+attr)
         pc.disconnectAttr(transConnection[0],master+'.'+attr)
 
-def connectMirrorTrans(obj1,obj2,axis):
+
+def connectMirrorTrans(obj1, obj2, axis):
     aAxisStr = ['x','y','z']
     axisStr = '.t'+aAxisStr[axis]    
 
@@ -552,7 +573,8 @@ def connectMirrorTrans(obj1,obj2,axis):
     pc.connectAttr((obj1+axisStr), (revNode+".input1D[1]"),f=True)
     pc.connectAttr((revNode+".output1D"), (obj2+axisStr),f=True)
 
-def connectMirrorRot(obj1,obj2,axis):
+
+def connectMirrorRot(obj1, obj2, axis):
     aAxisStr = ['x', 'y', 'z']
     axisStr = ".r"+aAxisStr[axis]
 
@@ -562,7 +584,8 @@ def connectMirrorRot(obj1,obj2,axis):
     pc.connectAttr((obj1+axisStr),(revNode+'.input1D[1]'),f=True)
     pc.connectAttr((revNode+'.output1D'),(obj2+axisStr),f=True)
 
-def makeFootHeelPivots(ankleJoint,ballJoint):
+
+def makeFootHeelPivots(ankleJoint, ballJoint):
     pc.select(cl=True)
 
     tempLoc = curveControl('grp','curve')
@@ -602,6 +625,7 @@ def makeFootHeelPivots(ankleJoint,ballJoint):
     pc.setAttr(ballJoint+'.bankOutPos',bankOutJnt[0],type='string')
     pc.select(cl=True)
     return tempLoc[0]
+
 
 def getQuadFlexLegJointPos(startJoint, endJoint):
     temp = createDistance(startJoint,endJoint)
@@ -647,6 +671,7 @@ def getQuadFlexLegJointPos(startJoint, endJoint):
     pc.delete(endLoc[0], midALoc[0], midBLoc[0], startLoc[0])
 
     return jointPos
+
 
 def quickZeroOut(n):
     s = []
@@ -695,6 +720,7 @@ def quickZeroOut(n):
     pc.select(s,r=True)
     return zeros
 
+
 def quickJointZeroOut(n):
     s = []
     zeros = []
@@ -741,6 +767,7 @@ def quickJointZeroOut(n):
     # pc.select(s,r=True)
     return zeros
 
+
 def getcharRigInfoNode(name):
     nonScaleGrp = name + 'non_scale_grp'
     if not pc.objExists(nonScaleGrp):
@@ -766,6 +793,7 @@ def getcharRigInfoNode(name):
         pc.setAttr(charInfoNode+'.date',date,l=True,type='string')
         return charInfoNode
 
+
 # rig side seperator, seperates side drop down selected option
 def rigSideSep(obj):
     ret = []
@@ -780,6 +808,7 @@ def rigSideSep(obj):
         ret.append(parts[len(parts)-2]+'_')
         ret.append(parts[len(parts)-1]+'_')
     return ret
+
 
 def getFingerAxisFigures(obj):
     # x=1 y=2 z=3
@@ -799,11 +828,13 @@ def getFingerAxisFigures(obj):
 
     return fingerAxis
 
+
 def toggleBaseSkeletonSelect():
     baseSkeleton = 'skeletons_grp'
     if pc.objExists(baseSkeleton):
         state = pc.getAttr(baseSkeleton+'.ove')
         pc.setAttr(baseSkeleton+'.ove',1-state)
+
 
 def createSkinJointSet(prefix):
     
@@ -811,10 +842,12 @@ def createSkinJointSet(prefix):
         pc.sets(n=prefix+'SkinJoints_set')
     return (prefix+'SkinJoints_set')
 
-def addSkinJointToSet(set,jointList):    
+
+def addSkinJointToSet(set, jointList):
     if pc.objExists(set):
         for j in jointList:            
             pc.sets(set,fe=j)
+
 
 def selectSkinJoints():
     if pc.objExists('*SkinJoints_set'):

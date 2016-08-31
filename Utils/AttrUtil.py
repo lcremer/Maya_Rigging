@@ -76,6 +76,7 @@ def addTwistJointAttr(type, count=2, sel=''):
         chUL.lockAndHide(loc, 'locknHide', 'trans rot scale vis')  # TODO: make sure this works
         pc.select(cl=True)
 
+
 def addTwistJointsAttr(type):
 
     sel = pc.ls(sl=True)
@@ -152,6 +153,7 @@ def addTwistJointsAttr(type):
             pc.select(cl=True)
     pc.select(sel)
 
+
 def removeTwistJointsAttr(type):
     sel=pc.ls(sl=True)
     if (len(sel) == 0):
@@ -167,6 +169,7 @@ def removeTwistJointsAttr(type):
             except:
                 pc.deleteAttr(type,s,attribute=True)
                 pc.deleteAttr('twistJointGrp',s,attribute=True)
+
 
 def addSplineJointAttrs(type, count=7, sel=''):
     if sel == '':
@@ -218,7 +221,7 @@ def addSplineJointAttrs(type, count=7, sel=''):
     multDiv = pc.createNode('multiplyDivide', n=(sel + 'Twist_md'))
     pc.setAttr((multDiv + '.operation'), 2)
     pc.setAttr((multDiv + '.input1X'), 10)
-    pc.connectAttr((sel + '.' + 'joints'), (multDiv + '.input2X'))
+    pc.connectAttr((sel + '.joints'), (multDiv + '.input2X'))
 
     red = pc.getAttr(sel + '.radius')
     red = (red / 2)
@@ -244,12 +247,15 @@ def addSplineJointAttrs(type, count=7, sel=''):
         pc.connectAttr((curveInfo + '.position'), (loc + '.translate'))
 
         multDivsVis.append(pc.createNode('multiplyDivide', n=(sel + '_' + type + str(y) + 'Vis_md')))
-        pc.connectAttr((sel + '.' + 'joints'), (multDivsVis[y - 1] + '.input1.input1X'))
+        pc.connectAttr((sel + '.joints'), (multDivsVis[y - 1] + '.input1.input1X'))
         pc.setAttr((multDivsVis[y - 1] + '.input2.input2X'), ((1.00 / (2 * y)) + 0.001))
         pc.connectAttr((multDivsVis[y - 1] + '.outputX'), (loc + '.visibility'))
 
         chUL.lockAndHide(loc, 'locknHide', 'trans rot scale vis')
         pc.select(cl=True)
+
+    pc.setAttr(sel + '.joints', 2)
+
 
 def addSplineJointsAttrs(type):
     sel=pc.ls(sl=True)

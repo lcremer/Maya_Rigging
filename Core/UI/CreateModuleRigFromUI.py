@@ -16,6 +16,7 @@ from Maya_Rigging.Utils import CharUtilsLib as chUL
 from Maya_Rigging.Utils import List
 from Maya_Rigging.Utils.String import *
 
+
 def createRig(ikfk='',
               stretch='',
               midLock='',
@@ -94,7 +95,7 @@ def createRig(ikfk='',
                     pc.error('You must specify number of joints on '+spineRigPartArray[i]+' for SPINE setup')
 
         if pc.attributeQuery('neckHeadRigParts', n='masterRigPartsHolder_node', ex=True):
-            neckHeadRigPart = pc.getAttr ('masterRigPartsHolder_node.neckHeadRigParts')
+            neckHeadRigPart = pc.getAttr('masterRigPartsHolder_node.neckHeadRigParts')
             neckHeadRigPartArray = List.seperate(neckHeadRigPart)
             for i in range(len(neckHeadRigPartArray)):
                 if not pc.attributeQuery('joints', n=neckHeadRigPartArray[i], ex=True):
@@ -130,6 +131,7 @@ def createRig(ikfk='',
                 pc.catch(pc.deleteAttr(spineRigPartArray[i], attribute='spineRig'))
 
                 numJoints = pc.getAttr(spineRigPartArray[i]+'.joints')
+
                 pc.select(spineRigPartArray[i], r=True)
                 atu.removeTwistJointsAttr('joints')
                 pc.select(cl=True)
@@ -210,15 +212,20 @@ def createRig(ikfk='',
                 pc.progressWindow(e=True, step=1, status=('building anim rig on : '+neckHeadRigPartArray[i]))
 
         if pc.attributeQuery('tentacleRigParts', n='masterRigPartsHolder_node', ex=True):
-            
-            dynamic = pc.checkBox('dynamicGlobalChk', q=True, v=True)
-            offset = pc.checkBox('offsetGlobalChk', q=True, v=True)
+
+            # TODO: update new UI to support dynamic and offset checkbox
+            # dynamic = pc.checkBox('dynamicGlobalChk', q=True, v=True)
+            # offset = pc.checkBox('offsetGlobalChk', q=True, v=True)
+
+            dynamic = False
+            offset = False
+
             for i in range(len(tentacleRigPartArray)):
-                name = pc.getAttr(tentacleRigPartArray[i]+'.name')
-                side = pc.getAttr(tentacleRigPartArray[i]+'.sides')
+                name = pc.getAttr(tentacleRigPartArray[i] + '.name')
+                side = pc.getAttr(tentacleRigPartArray[i] + '.sides')
                 controlColor = get_control_color(side, colorRight, colorCenter, colorLeft)
-                type = pc.getAttr(tentacleRigPartArray[i]+'.types')
-                tentacleRigCmdPart = pc.getAttr(tentacleRigPartArray[i]+'.tentacleRig')
+                type = pc.getAttr(tentacleRigPartArray[i] + '.types')
+                tentacleRigCmdPart = pc.getAttr(tentacleRigPartArray[i] + '.tentacleRig')
                 tentacleRigCmdArray = List.seperate(tentacleRigCmdPart)
                 
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='name'))
@@ -226,12 +233,12 @@ def createRig(ikfk='',
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='types'))
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='tentacleRig'))
                 
-                numJoints = pc.getAttr(tentacleRigPartArray[i]+'.joints')
+                numJoints = pc.getAttr(tentacleRigPartArray[i] + '.joints')
                 pc.select(tentacleRigPartArray[i], r=True)
                 atu.removeTwistJointsAttr('joints')
                 pc.select(cl=True)
                 
-                dis = chUL.getChainLength(tentacleRigCmdArray[0],tentacleRigCmdArray[1])
+                dis = chUL.getChainLength(tentacleRigCmdArray[0], tentacleRigCmdArray[1])
                 scale = dis/9
                 dis = 0
 

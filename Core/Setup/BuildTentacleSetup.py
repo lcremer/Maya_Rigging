@@ -83,7 +83,7 @@ def buildTentacleSetup(name,
         facingAxis = 'Z'         
         scaleCmd = cuUL.resizeCurves(None,1,1,0,2.5)
 
-    curveJoints = chUL.jointsOnCurve(curve, orientAxis, 'zup', numJoints,(name+type+'Def'))    
+    curveJoints = chUL.jointsOnCurve(curve, orientAxis, 'zup', numJoints, (name+type+'Def'))
     ikHandle = pc.ikHandle(name=(name + startJoint + '_ikh'), startJoint=curveJoints[0], endEffector=curveJoints[numJoints], solver='ikSplineSolver', curve=curve, createCurve=False, parentCurve=False)
     pc.setAttr((ikHandle[0] + '.visibility'), 0)
     chUL.lockAndHide(ikHandle[0],'lock','trans rot scale vis')

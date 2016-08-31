@@ -1,14 +1,8 @@
 import pymel.core as pc
-import re
 import BuildModuleJointSkeletonLib as bSkelLib
 from ..Utils import List as List
 from ..Utils.String import objGetPrefix
 
-# from Maya_Rigging import *
-
-#buildModuleJointSkeletonLib
-#charUtilsLib
-#libString
 
 def getParentAttrModuleComponants(obj):
     parentGrp = ''
@@ -20,17 +14,18 @@ def getParentAttrModuleComponants(obj):
         parent = (strip + '_jnt')		
     return parent
 
+
 def buildModuleSkeleton():
     sel = pc.ls(sl=True)
-    if len(sel)<=0:
+    if len(sel) <= 0:
         pc.select('worldPos_loc')
         sel = pc.ls(sl=True)
 
-    if len(sel)>0:
+    if len(sel) > 0:
         result = pc.confirmDialog(title='Build Skeleton',
                                   message='The current operation will convert all different modules into actual Joints and prepare skeleton for animation rig installation.\n\nAre you sure you want continue?',
                                   messageAlign='center',
-                                  button=['OK','Cancel'],
+                                  button=['OK', 'Cancel'],
                                   defaultButton='OK',
                                   cancelButton='Cancel',
                                   dismissString='Cancel')
@@ -41,6 +36,7 @@ def buildModuleSkeleton():
             buildConfirmed(sel)            
     else:
         pc.error('wordPos_loc could not be found')
+
 
 def buildConfirmed(sel):
     pc.hide(sel[0])
@@ -57,6 +53,7 @@ def buildConfirmed(sel):
 
     pc.delete(sel[0])
     pc.progressWindow('buildSkeletonProgress',endProgress=True)
+
 
 def getModuleList(sel):
     moduleList = ''
@@ -81,6 +78,7 @@ def getModuleList(sel):
         moduleList = moduleList + (tentacleModule+' ')
     return moduleList
 
+
 def buildSpine(sel):
     if pc.attributeQuery('spine', n=sel[0], ex=True):
         spineMainPlacer = pc.getAttr(sel[0]+'.spine')
@@ -96,6 +94,7 @@ def buildSpine(sel):
                     pc.undoInfo(state=True)
                     return
                 pc.progressWindow('buildSkeletonProgress',e=True, step=1, status=('building module skeleton on : '+s))
+
 
 def buildNeckHead(sel):
     if pc.attributeQuery('neckHead', n=sel[0], ex=True):
@@ -113,6 +112,7 @@ def buildNeckHead(sel):
                     return
                 pc.progressWindow('buildSkeletonProgress',e=True, step=1, status=('building module skeleton on : '+n))
 
+
 def buildLeg(sel):
     if pc.attributeQuery('leg', n=sel[0], ex=True):
         legMainPlacer = pc.getAttr(sel[0]+'.leg')
@@ -128,6 +128,7 @@ def buildLeg(sel):
                     pc.undoInfo(state=True)
                     return
                 pc.progressWindow('buildSkeletonProgress',e=True, step=1, status=('building module skeleton on : '+l))
+
 
 def buildArm(sel):
     if pc.attributeQuery('arm', n=sel[0], ex=True):
@@ -145,6 +146,7 @@ def buildArm(sel):
                     return
                 pc.progressWindow('buildSkeletonProgress',e=True, step=1, status=('building module skeleton on : '+a))
 
+
 def buildTentacle(sel):
     if pc.attributeQuery('tentacle', n=sel[0], ex=True):
         tentacleMainPlacer = pc.getAttr(sel[0]+'.tentacle')
@@ -160,4 +162,4 @@ def buildTentacle(sel):
                     pc.progressWindow('buildSkeletonProgress', endProgress=True) 
                     pc.undoInfo(state=True)
                     return
-                pc.progressWindow('buildSkeletonProgress',e=True, step=1, status=('building module skeleton on : '+t))
+                pc.progressWindow('buildSkeletonProgress', e=True, step=1, status=('building module skeleton on : '+t))
