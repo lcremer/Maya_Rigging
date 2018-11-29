@@ -1,8 +1,9 @@
-from PySide import QtGui, QtCore
+from PySide2 import QtGui, QtCore, QtWidgets
 from maya.app.general.mayaMixin import MayaQDockWidget
 from maya.app.general.mayaMixin import MayaQWidgetDockableMixin
 
 from Maya_Rigging.Core import ModuleSymmetryLib as msLib
+from Maya_Rigging.Core import DummyRigPartModulesLib as drLib
 from Maya_Rigging.Core import BuildModuleJointSkeleton as bmjs
 from Maya_Rigging.Core.UI import CreateModuleRigFromUI as cmr
 from Maya_Rigging.Core import ModuleTemplates as mt
@@ -17,7 +18,7 @@ def Open(*args):
     UI()
 
 
-class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
+class UI(MayaQWidgetDockableMixin, QtWidgets.QDialog):
     toolName = 'autoRigWidget'
     """
     Main AutoRig UI class
@@ -35,10 +36,10 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         self.setMaximumWidth(400)
 
         # main vertical layout
-        self.main_layout = QtGui.QVBoxLayout()
+        self.main_layout = QtWidgets.QVBoxLayout()
         self.setLayout(self.main_layout)
 
-        self.inner_layout = QtGui.QVBoxLayout(self)
+        self.inner_layout = QtWidgets.QVBoxLayout(self)
 
         # Create button panels
         self.globalButton()
@@ -47,13 +48,13 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         self.inner_layout.addStretch(1)
 
         # Setup the main scroll area
-        scrollList = QtGui.QScrollArea()
-        scrollList.setFrameShape(QtGui.QFrame.NoFrame)
+        scrollList = QtWidgets.QScrollArea()
+        scrollList.setFrameShape(QtWidgets.QFrame.NoFrame)
         scrollList.setVerticalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOn)
         scrollList.setHorizontalScrollBarPolicy(QtCore.Qt.ScrollBarAlwaysOff)
         scrollList.setWidgetResizable(False)
 
-        self.scroll_widget = QtGui.QWidget()
+        self.scroll_widget = QtWidgets.QWidget()
         self.scroll_widget.setLayout(self.inner_layout)
         scrollList.setWidget(self.scroll_widget)
 
@@ -69,7 +70,7 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
     # =====================================================================
     def globalButton(self):
 
-        v_list = QtGui.QVBoxLayout()
+        v_list = QtWidgets.QVBoxLayout()
 
         font = QtGui.QFont()
         font.setPixelSize(12)
@@ -77,29 +78,29 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def h_layout1():
 
-            h_layout = QtGui.QHBoxLayout()
+            h_layout = QtWidgets.QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
             # Name Label
-            labelName = QtGui.QLabel('Name')
+            labelName = QtWidgets.QLabel('Name')
             h_layout.addWidget(labelName)
             # add spacer
-            spacer = QtGui.QSpacerItem(15, 10)
+            spacer = QtWidgets.QSpacerItem(15, 10)
             h_layout.addSpacerItem(spacer)
 
             # name input
-            self.rig_name = QtGui.QLineEdit()
+            self.rig_name = QtWidgets.QLineEdit()
             h_layout.addWidget(self.rig_name)
 
             # Side Label
-            labelSide = QtGui.QLabel('Side Prefix')
+            labelSide = QtWidgets.QLabel('Side Prefix')
             h_layout.addWidget(labelSide)
             # add spacer
-            spacer = QtGui.QSpacerItem(15, 10)
+            spacer = QtWidgets.QSpacerItem(15, 10)
             h_layout.addSpacerItem(spacer)
 
             # Combo box
-            self.side_prefix = QtGui.QComboBox()
+            self.side_prefix = QtWidgets.QComboBox()
             self.side_prefix.addItems(['l/r', 'lt/rt', 'left/right', 'custom', 'none'])
             self.side_prefix.setFixedWidth(80)
             h_layout.addWidget(self.side_prefix)
@@ -107,7 +108,7 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         # Color Labels
         def h_layout2():
 
-            h_layout = QtGui.QHBoxLayout()
+            h_layout = QtWidgets.QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
             self.right_cb = ColorSpinBox(h_layout, 'Right', 10)
@@ -116,24 +117,24 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def h_layout3():
 
-            h_layout = QtGui.QHBoxLayout()
+            h_layout = QtWidgets.QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
             # Combo box
-            self.stretch_combobox = QtGui.QComboBox()
+            self.stretch_combobox = QtWidgets.QComboBox()
             # TODO: update code dependency to allow for Scale instead of scale, case difference
             self.stretch_combobox.addItems(['scale', 'translate', 'none'])
             h_layout.addWidget(self.stretch_combobox)
             # Stretch Checkbox
-            stretch_label = QtGui.QLabel('Stretch')
+            stretch_label = QtWidgets.QLabel('Stretch')
             h_layout.addWidget(stretch_label)
 
             # Volume CheckBox
-            self.volume_checkbox = QtGui.QCheckBox('Volume')
+            self.volume_checkbox = QtWidgets.QCheckBox('Volume')
             h_layout.addWidget(self.volume_checkbox)
             self.volume_checkbox.toggle()
 
-            self.midlock_checkbox = QtGui.QCheckBox('Mid Lock')
+            self.midlock_checkbox = QtWidgets.QCheckBox('Mid Lock')
             h_layout.addWidget(self.midlock_checkbox)
             self.midlock_checkbox.toggle()
 
@@ -146,7 +147,7 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         return collapsible_button.widget
 
     def templatesButton(self):
-        h_list = QtGui.QHBoxLayout()
+        h_list = QtWidgets.QHBoxLayout()
 
         font = QtGui.QFont()
         font.setPixelSize(12)
@@ -154,54 +155,54 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def biped():
 
-            group = QtGui.QGroupBox('Biped')
+            group = QtWidgets.QGroupBox('Biped')
             group.setMaximumWidth(200)
 
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1)
-            spine = QtGui.QSpinBox()
+            spine = QtWidgets.QSpinBox()
             spine.setFixedWidth(35)
             spine.setValue(4)
             h_layout1.addWidget(spine)
-            label_spine = QtGui.QLabel('Spine')
+            label_spine = QtWidgets.QLabel('Spine')
             h_layout1.addWidget(label_spine)
 
-            neck = QtGui.QSpinBox()
+            neck = QtWidgets.QSpinBox()
             neck.setFixedWidth(35)
             neck.setValue(1)
             h_layout1.addWidget(neck)
-            label_neck = QtGui.QLabel('Neck')
+            label_neck = QtWidgets.QLabel('Neck')
             h_layout1.addWidget(label_neck)
 
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
-            fingers = QtGui.QCheckBox('Fingers')
+            fingers = QtWidgets.QCheckBox('Fingers')
             fingers.toggle()
             h_layout3.addWidget(fingers)
 
-            f_joints = QtGui.QSpinBox()
+            f_joints = QtWidgets.QSpinBox()
             f_joints.setFixedWidth(35)
             f_joints.setValue(5)
             h_layout3.addWidget(f_joints)
-            label_f_joints = QtGui.QLabel('Joints')
+            label_f_joints = QtWidgets.QLabel('Joints')
             h_layout3.addWidget(label_f_joints)
 
-            h_layout4 = QtGui.QHBoxLayout()
+            h_layout4 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout4)
-            toes = QtGui.QCheckBox('Toes')
+            toes = QtWidgets.QCheckBox('Toes')
             toes.toggle()
             h_layout4.addWidget(toes)
-            t_joints = QtGui.QSpinBox()
+            t_joints = QtWidgets.QSpinBox()
             t_joints.setFixedWidth(35)
             t_joints.setValue(5)
             h_layout4.addWidget(t_joints)
-            label_t_joints = QtGui.QLabel('Joints')
+            label_t_joints = QtWidgets.QLabel('Joints')
             h_layout4.addWidget(label_t_joints)
 
-            create = QtGui.QPushButton('Create')
+            create = QtWidgets.QPushButton('Create')
             inner_list.addWidget(create)
 
             def disable_fingers():
@@ -231,57 +232,57 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def quadroped():
 
-            group = QtGui.QGroupBox('Quadroped')
+            group = QtWidgets.QGroupBox('Quadroped')
             group.setMaximumWidth(200)
 
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1)
-            spine = QtGui.QSpinBox()
+            spine = QtWidgets.QSpinBox()
             spine.setFixedWidth(35)
             spine.setValue(4)
             h_layout1.addWidget(spine)
-            label_spine = QtGui.QLabel('Spine')
+            label_spine = QtWidgets.QLabel('Spine')
             h_layout1.addWidget(label_spine)
 
-            neck = QtGui.QSpinBox()
+            neck = QtWidgets.QSpinBox()
             neck.setFixedWidth(35)
             neck.setValue(2)
             h_layout1.addWidget(neck)
-            label_neck = QtGui.QLabel('Neck')
+            label_neck = QtWidgets.QLabel('Neck')
             h_layout1.addWidget(label_neck)
 
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
-            ears = QtGui.QSpinBox()
+            ears = QtWidgets.QSpinBox()
             ears.setFixedWidth(35)
             ears.setValue(4)
             h_layout3.addWidget(ears)
-            label_ears = QtGui.QLabel('Ears')
+            label_ears = QtWidgets.QLabel('Ears')
             h_layout3.addWidget(label_ears)
 
-            tail = QtGui.QSpinBox()
+            tail = QtWidgets.QSpinBox()
             tail.setFixedWidth(35)
             tail.setValue(7)
             h_layout3.addWidget(tail)
-            label_tail = QtGui.QLabel('Tail')
+            label_tail = QtWidgets.QLabel('Tail')
             h_layout3.addWidget(label_tail)
 
-            h_layout4 = QtGui.QHBoxLayout()
+            h_layout4 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout4)
-            toes = QtGui.QCheckBox('Toes')
+            toes = QtWidgets.QCheckBox('Toes')
             toes.toggle()
             h_layout4.addWidget(toes)
-            t_joints = QtGui.QSpinBox()
+            t_joints = QtWidgets.QSpinBox()
             t_joints.setFixedWidth(35)
             t_joints.setValue(5)
             h_layout4.addWidget(t_joints)
-            label_t_joints = QtGui.QLabel('Joints')
+            label_t_joints = QtWidgets.QLabel('Joints')
             h_layout4.addWidget(label_t_joints)
 
-            create = QtGui.QPushButton('Create')
+            create = QtWidgets.QPushButton('Create')
             inner_list.addWidget(create)
 
             def disable_toes():
@@ -312,7 +313,7 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
     def modulesButton(self):
 
         # create widget layout
-        v_list = QtGui.QVBoxLayout()
+        v_list = QtWidgets.QVBoxLayout()
 
         font = QtGui.QFont()
         font.setPixelSize(12)
@@ -323,77 +324,77 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def arm():
 
-            group = QtGui.QGroupBox('Arm')
+            group = QtWidgets.QGroupBox('Arm')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1)
 
             # Joints input
-            joints_box = QtGui.QSpinBox()
+            joints_box = QtWidgets.QSpinBox()
             joints_box.setMaximumWidth(35)
             joints_box.setValue(3)
             h_layout1.addWidget(joints_box)
 
             # Joints Label
-            label_joints = QtGui.QLabel('Joints')
+            label_joints = QtWidgets.QLabel('Joints')
             h_layout1.addWidget(label_joints)
 
             # Dynamic & Offset Ctr
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
 
             # Combo box
-            side_combo = QtGui.QComboBox()
+            side_combo = QtWidgets.QComboBox()
             side_combo.addItems(side_list)
             side_combo.setCurrentIndex(2)
             h_layout1.addWidget(side_combo)
 
             # Side Label
-            labelSide = QtGui.QLabel('Side')
+            labelSide = QtWidgets.QLabel('Side')
             h_layout1.addWidget(labelSide)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2)
 
             # Fingers CheckBox
-            fingers_box = QtGui.QCheckBox('Fingers')
+            fingers_box = QtWidgets.QCheckBox('Fingers')
             h_layout2.addWidget(fingers_box)
 
             # Segments Input
-            count_box = QtGui.QSpinBox()
+            count_box = QtWidgets.QSpinBox()
             count_box.setValue(5)
             count_box.setMaximumWidth(35)
             h_layout2.addWidget(count_box)
 
             # Segments Label
-            label_count = QtGui.QLabel('Count')
+            label_count = QtWidgets.QLabel('Count')
             h_layout2.addWidget(label_count)
 
             # Segments Input
-            segments_box = QtGui.QSpinBox()
+            segments_box = QtWidgets.QSpinBox()
             segments_box.setValue(4)
             segments_box.setMaximumWidth(35)
             h_layout2.addWidget(segments_box)
 
             # Segments Label
-            label_segments = QtGui.QLabel('Segments')
+            label_segments = QtWidgets.QLabel('Segments')
             h_layout2.addWidget(label_segments)
 
-            spacer = QtGui.QSpacerItem(70, 10)
+            spacer = QtWidgets.QSpacerItem(70, 10)
             h_layout2.addSpacerItem(spacer)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createArm = QtGui.QPushButton('Create')
+            createArm = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createArm)
 
             def disable_fingers():
@@ -462,78 +463,78 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def leg():
 
-            group = QtGui.QGroupBox('Leg')
+            group = QtWidgets.QGroupBox('Leg')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1, stretch=0)
 
             # Joints input
-            joints_box = QtGui.QSpinBox()
+            joints_box = QtWidgets.QSpinBox()
             joints_box.setValue(3)
             joints_box.setMaximumWidth(35)
             h_layout1.addWidget(joints_box)
 
             # Joints Label
-            label_joints = QtGui.QLabel('Joints')
+            label_joints = QtWidgets.QLabel('Joints')
             h_layout1.addWidget(label_joints)
 
             # Dynamic & Offset Ctr
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
 
             # Combo box
-            side_combo = QtGui.QComboBox()
+            side_combo = QtWidgets.QComboBox()
             side_combo.addItems(side_list)
             side_combo.setCurrentIndex(2)
             h_layout1.addWidget(side_combo)
 
             # Side Label
-            label_side = QtGui.QLabel('Side')
+            label_side = QtWidgets.QLabel('Side')
             h_layout1.addWidget(label_side)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2, stretch=0)
 
             # Fingers CheckBox
-            fingers_box = QtGui.QCheckBox('Fingers')
+            fingers_box = QtWidgets.QCheckBox('Fingers')
             h_layout2.addWidget(fingers_box)
 
             # Segments Input
-            count_box = QtGui.QSpinBox()
+            count_box = QtWidgets.QSpinBox()
             count_box.setValue(5)
             count_box.setMaximumWidth(35)
             h_layout2.addWidget(count_box)
 
             # Segments Label
-            label_count = QtGui.QLabel('Count')
+            label_count = QtWidgets.QLabel('Count')
             h_layout2.addWidget(label_count)
 
             # Segments Input
-            segments_box = QtGui.QSpinBox()
+            segments_box = QtWidgets.QSpinBox()
             segments_box.setValue(4)
             segments_box.setMaximumWidth(35)
             h_layout2.addWidget(segments_box)
 
             # Segments Label
-            label_segments = QtGui.QLabel('Segments')
+            label_segments = QtWidgets.QLabel('Segments')
             h_layout2.addWidget(label_segments)
 
             # Quadroped CheckBox
-            quadroped_box = QtGui.QCheckBox('Quadroped')
+            quadroped_box = QtWidgets.QCheckBox('Quadroped')
             h_layout2.addWidget(quadroped_box)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createArm = QtGui.QPushButton('Create')
+            createArm = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createArm)
 
             def disable_fingers():
@@ -655,64 +656,64 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def spine():
 
-            group = QtGui.QGroupBox('Spine')
+            group = QtWidgets.QGroupBox('Spine')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1, stretch=0)
 
-            spine_box = QtGui.QLineEdit()
+            spine_box = QtWidgets.QLineEdit()
             spine_box.setText("spine")
             h_layout1.addWidget(spine_box)
 
-            label_spine = QtGui.QLabel('Title')
+            label_spine = QtWidgets.QLabel('Title')
             h_layout1.addWidget(label_spine)
 
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
-            sym_box = QtGui.QCheckBox('Symmetry')
+            sym_box = QtWidgets.QCheckBox('Symmetry')
             h_layout1.addWidget(sym_box)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2, stretch=0)
 
-            controls_box = QtGui.QSpinBox()
+            controls_box = QtWidgets.QSpinBox()
             controls_box.setMaximumWidth(35)
             controls_box.setValue(4)
             h_layout2.addWidget(controls_box)
 
-            label_controls = QtGui.QLabel('Controls')
+            label_controls = QtWidgets.QLabel('Controls')
             h_layout2.addWidget(label_controls)
 
-            length_box = QtGui.QSpinBox()
+            length_box = QtWidgets.QSpinBox()
             length_box.setMaximumWidth(35)
             length_box.setValue(4)
             h_layout2.addWidget(length_box)
 
-            label_length = QtGui.QLabel('Length')
+            label_length = QtWidgets.QLabel('Length')
             h_layout2.addWidget(label_length)
 
             # Dynamic & Offset Ctr
-            axis_combo = QtGui.QComboBox()
+            axis_combo = QtWidgets.QComboBox()
             axis_combo.addItems(axis_list)
             axis_combo.setCurrentIndex(1)
             h_layout2.addWidget(axis_combo)
-            label_axis = QtGui.QLabel('Axis')
+            label_axis = QtWidgets.QLabel('Axis')
             h_layout2.addWidget(label_axis)
-            spacer = QtGui.QSpacerItem(35, 10)
+            spacer = QtWidgets.QSpacerItem(35, 10)
             h_layout2.addSpacerItem(spacer)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createSpine = QtGui.QPushButton('Create')
+            createSpine = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createSpine)
 
             def build_spine():
@@ -763,66 +764,66 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def head():
 
-            group = QtGui.QGroupBox('Neck Head')
+            group = QtWidgets.QGroupBox('Neck Head')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1, stretch=0)
 
-            neck_box = QtGui.QLineEdit()
+            neck_box = QtWidgets.QLineEdit()
             neck_box.setText("neck")
             h_layout1.addWidget(neck_box)
 
-            label_neck = QtGui.QLabel('Title')
+            label_neck = QtWidgets.QLabel('Title')
             h_layout1.addWidget(label_neck)
 
             # Dynamic & Offset Ctr
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
-            sym_box = QtGui.QCheckBox('Symmetry')
+            sym_box = QtWidgets.QCheckBox('Symmetry')
             h_layout1.addWidget(sym_box)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2, stretch=0)
 
-            controls_box = QtGui.QSpinBox()
+            controls_box = QtWidgets.QSpinBox()
             controls_box.setMaximumWidth(35)
             controls_box.setValue(1)
             h_layout2.addWidget(controls_box)
 
-            label_controls = QtGui.QLabel('Controls')
+            label_controls = QtWidgets.QLabel('Controls')
             h_layout2.addWidget(label_controls)
 
-            length_box = QtGui.QSpinBox()
+            length_box = QtWidgets.QSpinBox()
             length_box.setMaximumWidth(35)
             length_box.setValue(1)
             h_layout2.addWidget(length_box)
 
-            label_length = QtGui.QLabel('Length')
+            label_length = QtWidgets.QLabel('Length')
             h_layout2.addWidget(label_length)
 
-            axis_combo = QtGui.QComboBox()
+            axis_combo = QtWidgets.QComboBox()
             axis_combo.addItems(axis_list)
             axis_combo.setCurrentIndex(1)
             h_layout2.addWidget(axis_combo)
 
-            label_axis = QtGui.QLabel('Axis')
+            label_axis = QtWidgets.QLabel('Axis')
             h_layout2.addWidget(label_axis)
 
-            spacer = QtGui.QSpacerItem(35, 10)
+            spacer = QtWidgets.QSpacerItem(35, 10)
             h_layout2.addSpacerItem(spacer)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createHead = QtGui.QPushButton('Create')
+            createHead = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createHead)
 
             def build_head():
@@ -871,61 +872,61 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def tentacle():
 
-            group = QtGui.QGroupBox('Tentacle')
+            group = QtWidgets.QGroupBox('Tentacle')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1, stretch=0)
 
-            tentacle_box = QtGui.QLineEdit()
+            tentacle_box = QtWidgets.QLineEdit()
             tentacle_box.setText("tail")
             h_layout1.addWidget(tentacle_box)
-            label_tentacle = QtGui.QLabel('Title')
+            label_tentacle = QtWidgets.QLabel('Title')
             h_layout1.addWidget(label_tentacle)
 
             # Dynamic & Offset Ctr
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
-            sym_box = QtGui.QCheckBox('Symmetry')
+            sym_box = QtWidgets.QCheckBox('Symmetry')
             h_layout1.addWidget(sym_box)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2, stretch=0)
 
-            controls_box = QtGui.QSpinBox()
+            controls_box = QtWidgets.QSpinBox()
             controls_box.setMaximumWidth(35)
             controls_box.setValue(7)
             h_layout2.addWidget(controls_box)
-            label_controls = QtGui.QLabel('Controls')
+            label_controls = QtWidgets.QLabel('Controls')
             h_layout2.addWidget(label_controls)
 
-            length_box = QtGui.QSpinBox()
+            length_box = QtWidgets.QSpinBox()
             length_box.setMaximumWidth(35)
             length_box.setValue(7)
             h_layout2.addWidget(length_box)
-            label_length = QtGui.QLabel('Length')
+            label_length = QtWidgets.QLabel('Length')
             h_layout2.addWidget(label_length)
 
-            axis_combo = QtGui.QComboBox()
+            axis_combo = QtWidgets.QComboBox()
             axis_combo.addItems(axis_list)
             h_layout2.addWidget(axis_combo)
-            label_axis = QtGui.QLabel('Axis')
+            label_axis = QtWidgets.QLabel('Axis')
             h_layout2.addWidget(label_axis)
 
-            spacer = QtGui.QSpacerItem(30, 10)
+            spacer = QtWidgets.QSpacerItem(30, 10)
             h_layout2.addSpacerItem(spacer)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createTentacle = QtGui.QPushButton('Create')
+            createTentacle = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createTentacle)
 
             def build_tentacle():
@@ -974,67 +975,67 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
 
         def finger():
 
-            group = QtGui.QGroupBox('Finger')
+            group = QtWidgets.QGroupBox('Finger')
             v_list.addWidget(group)
-            inner_list = QtGui.QVBoxLayout()
+            inner_list = QtWidgets.QVBoxLayout()
             group.setLayout(inner_list)
 
             # h layout1
-            h_layout1 = QtGui.QHBoxLayout()
+            h_layout1 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout1, stretch=0)
 
-            finger_box = QtGui.QLineEdit()
+            finger_box = QtWidgets.QLineEdit()
             finger_box.setText("index")
             h_layout1.addWidget(finger_box)
-            label_finger = QtGui.QLabel('Title')
+            label_finger = QtWidgets.QLabel('Title')
             h_layout1.addWidget(label_finger)
 
             # Dynamic & Offset Ctr
-            dynamic = QtGui.QCheckBox('Dynamic')
+            dynamic = QtWidgets.QCheckBox('Dynamic')
             h_layout1.addWidget(dynamic)
-            offset = QtGui.QCheckBox('Offset')
+            offset = QtWidgets.QCheckBox('Offset')
             h_layout1.addWidget(offset)
 
             # Side
-            side_combo = QtGui.QComboBox()
+            side_combo = QtWidgets.QComboBox()
             side_combo.addItems(side_list)
             side_combo.setMaximumWidth(50)
             h_layout1.addWidget(side_combo)
-            label_side = QtGui.QLabel('Side')
+            label_side = QtWidgets.QLabel('Side')
             h_layout1.addWidget(label_side)
 
             # h layout2
-            h_layout2 = QtGui.QHBoxLayout()
+            h_layout2 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout2, stretch=0)
 
-            controls_box = QtGui.QSpinBox()
+            controls_box = QtWidgets.QSpinBox()
             controls_box.setMaximumWidth(35)
             controls_box.setValue(4)
             h_layout2.addWidget(controls_box)
-            label_controls = QtGui.QLabel('Controls')
+            label_controls = QtWidgets.QLabel('Controls')
             h_layout2.addWidget(label_controls)
 
-            length_box = QtGui.QSpinBox()
+            length_box = QtWidgets.QSpinBox()
             length_box.setMaximumWidth(35)
             length_box.setValue(4)
             h_layout2.addWidget(length_box)
-            label_joints = QtGui.QLabel('Length')
+            label_joints = QtWidgets.QLabel('Length')
             h_layout2.addWidget(label_joints)
 
-            axis_combo = QtGui.QComboBox()
+            axis_combo = QtWidgets.QComboBox()
             axis_combo.addItems(axis_list)
             h_layout2.addWidget(axis_combo)
-            label_axis = QtGui.QLabel('Axis')
+            label_axis = QtWidgets.QLabel('Axis')
             h_layout2.addWidget(label_axis)
 
-            spacer = QtGui.QSpacerItem(30, 10)
+            spacer = QtWidgets.QSpacerItem(30, 10)
             h_layout2.addSpacerItem(spacer)
 
             # h layout3
-            h_layout3 = QtGui.QHBoxLayout()
+            h_layout3 = QtWidgets.QHBoxLayout()
             inner_list.addLayout(h_layout3)
 
-            createArm = QtGui.QPushButton('Create')
+            createArm = QtWidgets.QPushButton('Create')
             h_layout3.addWidget(createArm)
 
             def build_finger():
@@ -1099,10 +1100,10 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
     def modifyButtons(self):
 
         # v layout
-        v_list = QtGui.QVBoxLayout()
+        v_list = QtWidgets.QVBoxLayout()
 
         # h layout1
-        h_layout1 = QtGui.QHBoxLayout()
+        h_layout1 = QtWidgets.QHBoxLayout()
         # v_list is module vertical list
         v_list.addLayout(h_layout1, stretch=0)
 
@@ -1110,7 +1111,7 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         def connectModules():
             msLib.connectModuleComponentsUI('', '')
 
-        connect_modules = QtGui.QPushButton('Connect Modules')
+        connect_modules = QtWidgets.QPushButton('Connect Modules')
         connect_modules.clicked.connect(connectModules)
         h_layout1.addWidget(connect_modules)
 
@@ -1118,32 +1119,32 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         def addToHierarchy():
             msLib.addToModuleComponentsHierarchy()
 
-        add_to_hierarchy = QtGui.QPushButton('Add To Hierarchy')
+        add_to_hierarchy = QtWidgets.QPushButton('Add To Hierarchy')
         add_to_hierarchy.clicked.connect(addToHierarchy)
         h_layout1.addWidget(add_to_hierarchy)
 
-        delete = QtGui.QPushButton('Delete Module')
+        delete = QtWidgets.QPushButton('Delete Module')
         delete.clicked.connect(msLib.deleteModules)
         h_layout1.addWidget(delete)
 
-        h_layout2 = QtGui.QHBoxLayout()
+        h_layout2 = QtWidgets.QHBoxLayout()
         v_list.addLayout(h_layout2, stretch=0)
 
-        sym = QtGui.QPushButton('Symmetry')
+        sym = QtWidgets.QPushButton('Symmetry')
         sym.clicked.connect(msLib.connectModuleSymmetry)
         h_layout2.addWidget(sym)
 
         def breakModuleSymConnection():
             msLib.breakModuleSymConnection()
 
-        break_sym = QtGui.QPushButton('Break Symmetry')
+        break_sym = QtWidgets.QPushButton('Break Symmetry')
         break_sym.clicked.connect(breakModuleSymConnection)
         h_layout2.addWidget(break_sym)
 
         def mirrorModuleTemplates():
             msLib.mirrorModuleTemplates()
 
-        mir_sel = QtGui.QPushButton('Mirror Selected')
+        mir_sel = QtWidgets.QPushButton('Mirror Selected')
         mir_sel.clicked.connect(mirrorModuleTemplates)
         h_layout2.addWidget(mir_sel)
         self.main_layout.addLayout(v_list)
@@ -1153,11 +1154,11 @@ class UI(MayaQWidgetDockableMixin, QtGui.QDialog):
         font.setPixelSize(12)
         font.setBold(True)
 
-        h_layout = QtGui.QHBoxLayout()
-        skeleton_button = QtGui.QPushButton('GENERATE SKELETON')
+        h_layout = QtWidgets.QHBoxLayout()
+        skeleton_button = QtWidgets.QPushButton('GENERATE SKELETON')
         skeleton_button.clicked.connect(bmjs.buildModuleSkeleton)
 
-        rig_button = QtGui.QPushButton('GENERATE RIG')
+        rig_button = QtWidgets.QPushButton('GENERATE RIG')
         rig_button.clicked.connect(self.build_rig)
 
         skeleton_button.setMinimumHeight(35)

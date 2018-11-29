@@ -4,6 +4,7 @@ from Fingers import createFingers
 from Maya_Rigging.Utils import DummyUtil as dU
 from Maya_Rigging.Core import ModuleSymmetryLib as modSymLib
 
+
 def Arm(name, side, numJoints, fingers, numFingers, numSegment, colorIndex):
     elementsList = ''
     dummyBoneGrp = ''

@@ -3,7 +3,7 @@ Created a label, Frame, and SpinBox
 Used to represent Maya override colors
 """
 
-from PySide import QtGui
+from PySide2 import QtWidgets
 
 # TODO: consider moving someplace better?
 colors = [
@@ -50,15 +50,15 @@ class ColorSpinBox:
         self.parent_layout = parent_layout
         self.label_name = label_name
         self.default_value = default_value
-        self.label = QtGui.QLabel(label_name)
+        self.label = QtWidgets.QLabel(label_name)
         self.parent_layout.addWidget(self.label)
         # Color Frame
-        frame = QtGui.QFrame()
+        frame = QtWidgets.QFrame()
         self.frame = frame
         self.frame.setStyleSheet('background-color: #' + colors[default_value])
         self.parent_layout.addWidget(self.frame)
         # SpinBox
-        SpinBox = QtGui.QSpinBox()
+        SpinBox = QtWidgets.QSpinBox()
         self.SpinBox = SpinBox
         self.SpinBox.setValue(default_value)
         self.SpinBox.setMinimum(0)

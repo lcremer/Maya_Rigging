@@ -119,7 +119,7 @@ def buildBodyModuleSymmetry(master, slave):
     pc.addAttr(master, ln='doSymmetry', dt='string')
     pc.setAttr((master+'.doSymmetry'),slave, type='string')
 
-# TODO: Clean this crap up
+# TODO: Clean this up
 # connect components...
 # The idea here is that by add parent attr to the second selection dat way 
 # in skeleton creation respetive module will know its parent...

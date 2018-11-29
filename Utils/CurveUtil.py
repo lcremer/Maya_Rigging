@@ -403,7 +403,7 @@ def rotateCurveWrapper(axis,mode):
 
 def moveCurveWrapper(axis,mode):
     moveValue = pc.floatSliderGrp('moveCurveFSG',q=True,v=True)
-    editCurveTransform(axis,mode,modeValue)
+    editCurveTransform(axis,mode,moveValue)
 
 def resizeCurveWrapper():
     scale = pc.floatSliderGrp('resizeFSG',q=True,v=True)
