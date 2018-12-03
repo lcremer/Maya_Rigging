@@ -17,9 +17,9 @@ from Util import rigSideSep
 autoRigMixinWindow = None
 
 def Open(*args):
-    DockableWidgetUI()
+    AutoRigDockableWidgetUI()
 
-def DockableWidgetUI(restore=False):
+def AutoRigDockableWidgetUI(restore=False):
     global autoRigMixinWindow
 
     restoredControl = None
@@ -34,7 +34,7 @@ def DockableWidgetUI(restore=False):
         mixinPtr = omui.MQtUtil.findControl(autoRigMixinWindow.objectName())
         omui.MQtUtil.addWidgetToMayaLayout(long(mixinPtr), long(restoredControl))
     else:
-        autoRigMixinWindow.show(dockable=True, height=600, width=480, uiScript='DockableWidgetUI(restore=True)')
+        autoRigMixinWindow.show(dockable=True, height=600, width=480, uiScript='AutoRigDockableWidgetUI(restore=True)')
 
     return autoRigMixinWindow
 
@@ -52,8 +52,8 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
 
         self.setWindowFlags(Qt.Window)
         self.setWindowTitle('AutoRig')
-        self.setMinimumWidth(400)
-        self.setMaximumWidth(400)
+        self.setMinimumWidth(500)
+        # self.setMaximumWidth(500)
 
         # main vertical layout
         self.main_layout = QVBoxLayout()
