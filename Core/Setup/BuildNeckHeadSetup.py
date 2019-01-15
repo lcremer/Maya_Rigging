@@ -1,6 +1,6 @@
 import pymel.core as pc
 from BuildSpaceSwitchSetup import buildSpaceSwitchSetup
-from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.BuildWorld import build_world
 from ..JointStretchNetworkLib import buildIkStretch
 from ..JointStretchNetworkLib import stretchySpline
 from ...Utils.CharUtilsLib import addSkinJointToSet
@@ -60,10 +60,10 @@ def multiBoneHeadNeckSetup(name, side, neckJoint, headJoint, stretchType, numJoi
     lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = buildWorld(name, scale)
+        cleanGrp = build_world(name, scale)
         pc.parent(partGrp, cleanGrp[0])
     else:
-        scaleNode = buildWorld.createScaleGrp(name)
+        scaleNode = build_world.createScaleGrp(name)
 
     #get no neck joints btween first neck joint to head joint
     list = findJointArray(neckJoint,headJoint)
@@ -234,10 +234,10 @@ def headNeckSetup(name, side, neckJoint, headJoint, stretchType, numJoints, stre
     lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = buildWorld (name, scale)
+        cleanGrp = build_world (name, scale)
         pc.parent(partGrp, cleanGrp[0])
     else:
-        scaleNode = buildWorld.createScaleGrp(name)
+        scaleNode = build_world.createScaleGrp(name)
 
     stretchAxis = getStretchAxis(headJoint,'translate')
 

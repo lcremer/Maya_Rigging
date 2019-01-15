@@ -1,7 +1,7 @@
-import pymel.core as pc
 from Util import *
 
-def createFingers(name, fingerName, side, numCon, axis, val, colorIndex):
+
+def build(name, fingerName, side, num_con, axis, val, colorIndex):
     tentacleDummyJnt = []
     control = []
     list = ''
@@ -10,7 +10,7 @@ def createFingers(name, fingerName, side, numCon, axis, val, colorIndex):
     pos = val
     tentMainPos = cuLib.curveControl('cube1', 'curve')
     tentMainPos[0] = pc.rename(tentMainPos[0], name + side + fingerName + 'Main_ctrl')
-    shapeColorOverride(tentMainPos[0], colorIndex)
+    shape_color_override(tentMainPos[0], colorIndex)
     cuLib.resizeCurves(None, 1, 1, 1, 1.5)
     # module tags
     pc.addAttr(tentMainPos[0], ln='moduleTag', dt='string')
@@ -19,8 +19,8 @@ def createFingers(name, fingerName, side, numCon, axis, val, colorIndex):
 
     pc.setAttr((tentMainPos[0] + '.moduleTag'), 'finger', type='string')
 
-    for i in range(numCon):
-        tentacleDummyJnt = createDummyJoint(colorIndex)
+    for i in range(num_con):
+        tentacleDummyJnt = create_dummy_joint(colorIndex)
         tentacleDummyJnt[0] = pc.rename(tentacleDummyJnt[0], (name + side + fingerName + str(i + 1) + '_loc'))
         control.append(tentacleDummyJnt[0])
         if i > 0:
@@ -33,13 +33,13 @@ def createFingers(name, fingerName, side, numCon, axis, val, colorIndex):
             elif axis == 'z':
                 pc.move(0, 0, val, control[i])
                 lock = 'x'
-            dummyBoneGrp = createDummyBone(fingerName, side, control[i - 1], control[i])
+            dummyBoneGrp = create_dummy_bone(fingerName, side, control[i - 1], control[i])
             val = (val + pos)
 
         pc.parent(tentacleDummyJnt, tentMainPos[0])
         list = list + (tentacleDummyJnt[0] + ' ')
 
-    for x in range(numCon):
+    for x in range(num_con):
         pc.setAttr((control[x] + '.t' + lock), lock=True)
 
     pc.setAttr((dummyBoneGrp + '.inheritsTransform'), 0)

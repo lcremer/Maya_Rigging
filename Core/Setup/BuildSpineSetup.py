@@ -34,10 +34,10 @@ def buildSpineSetup(name,
     chUL.lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = bw.buildWorld(name, scale, colorCenter)
+        cleanGrp = bw.build_world(name, scale, colorCenter)
         pc.parent(partGrp, cleanGrp[0])
     else:
-        scaleNode = bw.createScaleGrp(name)
+        scaleNode = bw.create_scale_grp(name)
 
     # considering that root jnt will be the main parent joint so parent in the skeleton grp..
     # parent rootJoint cleanGrp[1]

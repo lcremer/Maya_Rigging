@@ -33,10 +33,10 @@ def buildTentacleSetup(name,
     chUL.lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = bw.buildWorld (name, scale)
+        cleanGrp = bw.build_world (name, scale)
         pc.parent(partGrp, cleanGrp[0])
     else:
-        scaleNode = bw.createScaleGrp(name)
+        scaleNode = bw.create_scale_grp(name)
 
     list = chUL.findJointArray(startJoint, endJoint)
     size = len(list)
@@ -200,7 +200,7 @@ def makeDynamicCurve(name, type, curves, controller):
     connections = []
     nonScaleGrp = (name+'non_scale_grp')
 
-    nonScaleGrp = bw.createNonScaleGrp(name)
+    nonScaleGrp = bw.create_non_scale_grp(name)
 
     pc.select(curves, r=True)    
     # TODO: convert to python

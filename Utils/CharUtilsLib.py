@@ -355,32 +355,33 @@ def lockAndHide(n, mode, channels):
 
 
 # This proc creates distance connection for specified joint
-def createDistance(startJoint, endJoint):
+def createDistance(start_joint, end_joint):
+    """creates distanceDimension node with its locators matching the position of start_joint and end_joint"""
     result = []
     
     # get worldSpace value in order to get exact position of selected joint
-    startPos = pc.xform(startJoint,q=True,worldSpace=True,rotatePivot=True)
-    endPos = pc.xform(endJoint,q=True,worldSpace=True,rotatePivot=True)
+    start_pos = pc.xform(start_joint, q=True, worldSpace=True, rotatePivot=True)
+    end_pos = pc.xform(end_joint, q=True, worldSpace=True, rotatePivot=True)
 
     # create dummy locators
-    tmpLoc1 = pc.spaceLocator(n=startJoint + '_start_loc')
-    tmpLoc2 = pc.spaceLocator(n=startJoint + '_end_loc')
+    tmp_loc1 = pc.spaceLocator(n=start_joint + '_start_loc')
+    tmp_loc2 = pc.spaceLocator(n=start_joint + '_end_loc')
 
     # snap locators to respective joints    
-    pc.move(startPos[0], startPos[1], startPos[2], tmpLoc1, a=True,ws=True)    
-    pc.move(endPos[0], endPos[1], endPos[2], tmpLoc2, a=True, ws=True)
+    pc.move(start_pos[0], start_pos[1], start_pos[2], tmp_loc1, a=True,ws=True)
+    pc.move(end_pos[0], end_pos[1], end_pos[2], tmp_loc2, a=True, ws=True)
 
-    dimensionNode = pc.createNode('distanceDimShape')
-    pc.connectAttr(tmpLoc1 + '.worldPosition[0]', dimensionNode + '.startPoint')
-    pc.connectAttr(tmpLoc2 + '.worldPosition[0]', dimensionNode + ".endPoint")
+    dimension_node = pc.createNode('distanceDimShape')
+    pc.connectAttr(tmp_loc1 + '.worldPosition[0]', dimension_node + '.startPoint')
+    pc.connectAttr(tmp_loc2 + '.worldPosition[0]', dimension_node + ".endPoint")
 
     # rename distance dimension node
-    dimensionParent = pc.listRelatives(dimensionNode, parent=True)
-    newName = pc.rename(dimensionParent,(startJoint +'_distance'))
+    dimension_parent = pc.listRelatives(dimension_node, parent=True)
+    new_name = pc.rename(dimension_parent, (start_joint + '_distance'))
 
-    result.append(newName)		#distance node
-    result.append(tmpLoc1)	    #start locator
-    result.append(tmpLoc2)	    #end locator
+    result.append(new_name)		#distance node
+    result.append(tmp_loc1)	    #start locator
+    result.append(tmp_loc2)	    #end locator
 
     return result
 

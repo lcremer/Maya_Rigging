@@ -47,7 +47,7 @@ def buildQuadLegSetup(name,
     chUL.lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = bw.buildWorld(name, scale)
+        cleanGrp = bw.build_world(name, scale)
         pc.parent(partGrp, cleanGrp[0])
 
     # get child joint of ball joint

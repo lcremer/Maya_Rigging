@@ -1,12 +1,12 @@
 import pymel.core as pc
 
 from ...Utils.CharUtilsLib import rigSideSep
-from Maya_Rigging.Core.Dummy.DummyBuild import DummyBuild
 from ..ModuleSymmetryLib import buildBodyModuleSymmetry
 from ..ModuleSymmetryLib import buildLegModuleSymmetry
 from ..ModuleSymmetryLib import buildArmModuleSymmetry
-from Maya_Rigging.Core import ModuleTemplates as mt
-from Maya_Rigging.Core import ModuleSymmetryLib as msLib
+from ...Core import ModuleTemplates as mt
+from ...Core import ModuleSymmetryLib as msLib
+from ...Core import Dummy as Dummy
 
 
 def buildArmDummySkeletonModulePreCMD():
@@ -62,7 +62,7 @@ def buildArmDummySkeletonModulePreCMD():
     if name != '':
         name = (name + '_')
 
-    DummyBuild.Arm(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex-1))
+    Dummy.Arm(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex-1))
 
     if sideDef==2 and symm==0:
         msLib.mirrorModuleTemplates (name+side+'armPlacer_loc')
@@ -76,7 +76,7 @@ def buildArmDummySkeletonModulePreCMD():
             symmSide = sideQ[0]
             colorIndex = leftColorIndex
 
-        DummyBuild.Arm(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex-1))
+        Dummy.Arm(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex-1))
 
         if sideDef == 1:
             master = (name+side+'armPlacer_loc')
@@ -139,9 +139,9 @@ def build_leg_dummy_skeleton_module_pre_cmd():
         pc.error('you must define minimum 4 joints for Quadroped leg module...')
 
     if result == 'Biped':
-        DummyBuild.LegBiped(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
+        Dummy.Leg.Biped(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
     if result == 'Quadroped':
-        DummyBuild.LegQuad(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
+        Dummy.Leg.Quadruped(name, side, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
 
     if sideDef==2 and symm==0:
         msLib.mirrorModuleTemplates(name+side+'legPlacer_loc')
@@ -156,9 +156,10 @@ def build_leg_dummy_skeleton_module_pre_cmd():
             colorIndex = leftColorIndex
 
         if result == 'Biped':
-            DummyBuild.LegBiped(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
+            Dummy.Leg.Biped(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
+        # TODO: correct spelling for this, should be Quadruped
         if result == 'Quadroped':
-            DummyBuild.LegQuad(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
+            Dummy.Leg.Quadruped(name, symmSide, numJoints, fingers, numFingers, numSegment, (colorIndex - 1))
 
         if sideDef == 1:
             master = (name+side+'legPlacer_loc')
@@ -215,9 +216,9 @@ def buildSpineDummySkeletonModulePreCMD():
     if name != '':
         name = (name + '_')
 
-    DummyBuild.Spine(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
+    Dummy.Spine(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
     if symm:
-        DummyBuild.Spine(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
+        Dummy.Spine(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
         master = (name+side+moduleName+'Main_ctrl') 
         slave = (name+sideQ[1]+moduleName+'Main_ctrl')
         buildBodyModuleSymmetry(master,slave)
@@ -269,9 +270,9 @@ def build_head_neck_dummy_skeleton_module_pre_cmd():
         if name != '':
             name = (name + '_')
 
-    DummyBuild.HeadNeck(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
+    Dummy.HeadNeck(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
     if symm:
-        DummyBuild.HeadNeck(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
+        Dummy.HeadNeck(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
         master = (name+side+moduleName+'Main_ctrl') 
         slave = (name+sideQ[1]+moduleName+'Main_ctrl')
         buildBodyModuleSymmetry(master,slave)
@@ -323,9 +324,9 @@ def buildTentacleDummySkeletonModulePreCMD():
         if name != '':
             name = (name + '_')
 
-    DummyBuild.Tentacle(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
+    Dummy.Tentacle(name, side, moduleName, numCon, axis, dis, (colorIndex-1))
     if symm:
-        DummyBuild.Tentacle(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
+        Dummy.Tentacle(name, sideQ[1], moduleName, numCon, axis, dis, (rightColorIndex-1))
         master = (name+side+moduleName+'Main_ctrl') 
         slave = (name+sideQ[1]+moduleName+'Main_ctrl')
         buildBodyModuleSymmetry(master,slave)
@@ -377,9 +378,9 @@ def buildFingerDummySkeletonModulePreCMD():
         if name != '':
             name = (name + '_')
 
-    DummyBuild.Fingers(name, fingerName, side, numCon, axis, dis, (colorIndex-1))
+    Dummy.Fingers(name, fingerName, side, numCon, axis, dis, (colorIndex-1))
     if symm:
-        DummyBuild.Fingers(name, fingerName, sideQ[1], numCon, axis, dis, (rightColorIndex-1))
+        Dummy.Fingers(name, fingerName, sideQ[1], numCon, axis, dis, (rightColorIndex-1))
         master = (name+side+fingerName+'Main_ctrl')
         slave = (name+sideQ[1]+fingerName+'Main_ctrl')
         buildBodyModuleSymmetry(master,slave)

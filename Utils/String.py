@@ -32,7 +32,7 @@ def add_(string = ''):
     
 def combineWith_(string):
     """
-    Combine all strings given with _    
+    combine all strings given with _
     """
     
     if len(string) == 0:

@@ -1,5 +1,5 @@
 from Maya_Rigging.Core import JointStretchNetworkLib as js
-from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.BuildWorld import build_world
 from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsss
 from Maya_Rigging.Core.Setup import BuildTwistJointSetup as btjs
 from Maya_Rigging.Utils import AttrUtil as atu
@@ -40,7 +40,7 @@ def buildBipedLegSetup(name,
     lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = buildWorld(name, scale)
+        cleanGrp = build_world(name, scale)
         pc.parent(partGrp,cleanGrp[0])
 
     # get child joint of ball joint

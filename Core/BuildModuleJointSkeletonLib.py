@@ -487,7 +487,7 @@ def buildNeckHeadJointSkeleton(parent):
             # creating neck joints
             neckJoints = buildJointSkeleton(parent)
             
-            headParent = bModSkel.getParentAttrModuleComponants(child)
+            headParent = bModSkel.get_parent_attr_module_components(child)
 
             # creating head joints
             pc.select(child, r=True)

@@ -1,6 +1,6 @@
 import pymel.core as pc
 from BuildSpaceSwitchSetup import buildSpaceSwitchSetup
-from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.BuildWorld import build_world
 from ...Utils.CharUtilsLib import curveGuide
 from ...Utils.CharUtilsLib import getcharRigInfoNode
 from ...Utils.CharUtilsLib import lockAndHide
@@ -10,7 +10,7 @@ from ...Utils.CurveUtilLib import fixFacingAxis
 from ...Utils.CurveUtilLib import resizeCurves
 from ...Utils.Transform import Snap
 
-#eval('source \'buildWorld.mel\'')
+#eval('source \'build_world.mel\'')
 #source 'snaps.mel'
 #charUtilsLib
 #curveUtilitiesLib
@@ -27,7 +27,7 @@ def buildEyeSetup(name,
                   colorLeft):
     partGrp = pc.group(em=True, n=(name + side + 'eyesParts_grp#'))
     if world:
-        cleanGrp = buildWorld(name, scale)
+        cleanGrp = build_world(name, scale)
         pc.parent(partGrp, cleanGrp[0])
 
     #controls creation

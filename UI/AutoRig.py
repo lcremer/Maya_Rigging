@@ -4,11 +4,12 @@ from PySide2.QtCore import *
 from PySide2.QtGui import *
 from PySide2.QtWidgets import *
 
-from Maya_Rigging.Core import ModuleSymmetryLib as msLib
-from Maya_Rigging.Core import DummyRigPartModulesLib as drLib
-from Maya_Rigging.Core import BuildModuleJointSkeleton as bmjs
-from Maya_Rigging.Core.UI import CreateModuleRigFromUI as cmr
-from Maya_Rigging.Core import ModuleTemplates as mt
+from ..Core.Dummy import *
+from ..Core.Dummy.Leg import *
+from ..Core import ModuleSymmetryLib as msLib
+from ..Core import BuildModuleJointSkeleton as bmjs
+from ..Core.UI import CreateModuleRigFromUI as cmr
+from ..Core import ModuleTemplates as mt
 
 from CollapsibleButton import CollapsibleButton
 from ColorSpinBox import ColorSpinBox
@@ -16,8 +17,10 @@ from Util import rigSideSep
 
 autoRigMixinWindow = None
 
+
 def Open(*args):
     AutoRigDockableWidgetUI()
+
 
 def AutoRigDockableWidgetUI(restore=False):
     global autoRigMixinWindow
@@ -38,16 +41,18 @@ def AutoRigDockableWidgetUI(restore=False):
 
     return autoRigMixinWindow
 
+
 class DockableWidget(MayaQWidgetDockableMixin, QWidget):
     toolName = 'autoRigWidget'
     """
     Main AutoRig UI class
     """
+
     def __init__(self, parent=None):
-        #self.delete_instance()
+        # self.delete_instance()
 
         super(DockableWidget, self).__init__(parent=parent)
-        #self.mayaMainWindow = getMayaWindow()
+        # self.mayaMainWindow = getMayaWindow()
         self.setObjectName(self.__class__.toolName)
 
         self.setWindowFlags(Qt.Window)
@@ -97,7 +102,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
         font.setBold(True)
 
         def h_layout1():
-
             h_layout = QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
@@ -127,7 +131,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
 
         # Color Labels
         def h_layout2():
-
             h_layout = QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
@@ -136,7 +139,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
             self.left_cb = ColorSpinBox(h_layout, 'Left', 26)
 
         def h_layout3():
-
             h_layout = QHBoxLayout()
             v_list.addLayout(h_layout, stretch=0)
 
@@ -174,7 +176,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
         font.setBold(True)
 
         def biped():
-
             group = QGroupBox('Biped')
             group.setMaximumWidth(200)
 
@@ -251,7 +252,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
             return group
 
         def quadroped():
-
             group = QGroupBox('Quadroped')
             group.setMaximumWidth(200)
 
@@ -442,24 +442,24 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                 # TODO: handle custom side prefix
                 if side_combo.currentIndex() == 2:
                     # left
-                    drLib.buildArmDummySkeletonModule(name,
-                                                      self.prefix_left(),
-                                                      numJoints,
-                                                      fingers,
-                                                      numFingers,
-                                                      numSegment,
-                                                      leftColorIndex)
+                    Arm.build(name,
+                              self.prefix_left(),
+                              numJoints,
+                              fingers,
+                              numFingers,
+                              numSegment,
+                              leftColorIndex)
                     # right
-                    drLib.buildArmDummySkeletonModule(name,
-                                                      self.prefixRight(),
-                                                      numJoints,
-                                                      fingers,
-                                                      numFingers,
-                                                      numSegment,
-                                                      rightColorIndex)
+                    Arm.build(name,
+                              self.prefix_right(),
+                              numJoints,
+                              fingers,
+                              numFingers,
+                              numSegment,
+                              rightColorIndex)
 
                     master = (name + self.prefix_left() + 'armPlacer_loc')
-                    slave = (name + self.prefixRight() + 'armPlacer_loc')
+                    slave = (name + self.prefix_right() + 'armPlacer_loc')
                     msLib.buildArmModuleSymmetry(master, slave)
 
                 else:
@@ -467,15 +467,15 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                         side = self.prefix_left()
                         colorIndex = leftColorIndex
                     else:
-                        side = self.prefixRight()
+                        side = self.prefix_right()
                         colorIndex = leftColorIndex
-                    drLib.buildArmDummySkeletonModule(name,
-                                                      side,
-                                                      numJoints,
-                                                      fingers,
-                                                      numFingers,
-                                                      numSegment,
-                                                      colorIndex)
+                        Arm.build(name,
+                                  side,
+                                  numJoints,
+                                  fingers,
+                                  numFingers,
+                                  numSegment,
+                                  colorIndex)
                     if side_combo.currentIndex() == 1:
                         msLib.mirrorModuleTemplates(name + side + 'armPlacer_loc')
 
@@ -592,27 +592,27 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                     # TODO: handle custom side prefix
                     if side_combo.currentIndex() == 2:
                         # left
-                        drLib.buildQuadLegDummySkeletonModule(name,
-                                                              self.prefix_left(),
-                                                              numJoints,
-                                                              fingers,
-                                                              numFingers,
-                                                              numSegment,
-                                                              leftColorIndex)
+                        Quadruped.build(name,
+                                        self.prefix_left(),
+                                        numJoints,
+                                        fingers,
+                                        numFingers,
+                                        numSegment,
+                                        leftColorIndex)
                         # right
-                        drLib.buildQuadLegDummySkeletonModule(name,
-                                                              self.prefixRight(),
-                                                              numJoints,
-                                                              fingers,
-                                                              numFingers,
-                                                              numSegment,
-                                                              rightColorIndex)
+                        Quadruped.build(name,
+                                        self.prefix_right(),
+                                        numJoints,
+                                        fingers,
+                                        numFingers,
+                                        numSegment,
+                                        rightColorIndex)
 
                         # commented out to resolve issue with incorrectly mirroring of left side
                         # msLib.mirrorModuleTemplates(name + self.prefix_left() + 'legPlacer_loc')
 
                         master = (name + self.prefix_left() + 'legPlacer_loc')
-                        slave = (name + self.prefixRight() + 'legPlacer_loc')
+                        slave = (name + self.prefix_right() + 'legPlacer_loc')
                         msLib.buildLegModuleSymmetry(master, slave)
 
                     else:
@@ -620,39 +620,39 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                             side = self.prefix_left()
                             colorIndex = leftColorIndex
                         else:
-                            side = self.prefixRight()
+                            side = self.prefix_right()
                             colorIndex = rightColorIndex
-                        drLib.buildQuadLegDummySkeletonModule(name,
-                                                              side,
-                                                              numJoints,
-                                                              fingers,
-                                                              numFingers,
-                                                              numSegment,
-                                                              colorIndex)
+                            Quadruped.build(name,
+                                            side,
+                                            numJoints,
+                                            fingers,
+                                            numFingers,
+                                            numSegment,
+                                            colorIndex)
                         if side_combo.currentIndex() == 1:
                             msLib.mirrorModuleTemplates(name + side + 'legPlacer_loc')
                 else:
                     # TODO: handle custom side prefix
                     if side_combo.currentIndex() == 2:
                         # left
-                        drLib.buildBipedLegDummySkeletonModule(name,
-                                                               self.prefix_left(),
-                                                               numJoints,
-                                                               fingers,
-                                                               numFingers,
-                                                               numSegment,
-                                                               leftColorIndex)
+                        Biped.build(name,
+                                    self.prefix_left(),
+                                    numJoints,
+                                    fingers,
+                                    numFingers,
+                                    numSegment,
+                                    leftColorIndex)
                         # right
-                        drLib.buildBipedLegDummySkeletonModule(name,
-                                                               self.prefixRight(),
-                                                               numJoints,
-                                                               fingers,
-                                                               numFingers,
-                                                               numSegment,
-                                                               rightColorIndex)
+                        Biped.build(name,
+                                    self.prefix_right(),
+                                    numJoints,
+                                    fingers,
+                                    numFingers,
+                                    numSegment,
+                                    rightColorIndex)
 
                         master = (name + self.prefix_left() + 'legPlacer_loc')
-                        slave = (name + self.prefixRight() + 'legPlacer_loc')
+                        slave = (name + self.prefix_right() + 'legPlacer_loc')
                         msLib.buildLegModuleSymmetry(master, slave)
 
                     else:
@@ -660,15 +660,15 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                             side = self.prefix_left()
                             colorIndex = leftColorIndex
                         else:
-                            side = self.prefixRight()
+                            side = self.prefix_right()
                             colorIndex = rightColorIndex
-                        drLib.buildBipedLegDummySkeletonModule(name,
-                                                               side,
-                                                               numJoints,
-                                                               fingers,
-                                                               numFingers,
-                                                               numSegment,
-                                                               colorIndex)
+                            Biped.build(name,
+                                        side,
+                                        numJoints,
+                                        fingers,
+                                        numFingers,
+                                        numSegment,
+                                        colorIndex)
                         if side_combo.currentIndex() == 1:
                             msLib.mirrorModuleTemplates(name + side + 'legPlacer_loc')
 
@@ -754,29 +754,29 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                 # TODO: handle custom side prefix
                 if sym_box.isChecked():
                     # left
-                    drLib.buildSpineDummySkeletonModule(name,
-                                                        self.prefix_left(),
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        leftColorIndex)
+                    Spine.build(name,
+                                self.prefix_left(),
+                                moduleName,
+                                numCon,
+                                axis,
+                                dis,
+                                leftColorIndex)
                     # right
-                    drLib.buildSpineDummySkeletonModule(name,
-                                                        self.prefixRight(),
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        rightColorIndex)
+                    Spine.build(name,
+                                self.prefix_right(),
+                                moduleName,
+                                numCon,
+                                axis,
+                                dis,
+                                rightColorIndex)
                 else:
-                    drLib.buildSpineDummySkeletonModule(name,
-                                                        '',
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        cenColorIndex)
+                    Spine.build(name,
+                                '',
+                                moduleName,
+                                numCon,
+                                axis,
+                                dis,
+                                cenColorIndex)
 
                 # TODO: handle symmetry
 
@@ -864,29 +864,29 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                 # TODO: handle custom side prefix
                 if sym_box.isChecked():
                     # left
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                           self.prefix_left(),
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           leftColorIndex)
+                    HeadAndNeck.build(name,
+                                      self.prefix_left(),
+                                      moduleName,
+                                      numCon,
+                                      axis,
+                                      dis,
+                                      leftColorIndex)
                     # right
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                           self.prefixRight(),
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           rightColorIndex)
+                    HeadAndNeck.build(name,
+                                      self.prefix_right(),
+                                      moduleName,
+                                      numCon,
+                                      axis,
+                                      dis,
+                                      rightColorIndex)
                 else:
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                           '',
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           cenColorIndex)
+                    HeadAndNeck.build(name,
+                                      '',
+                                      moduleName,
+                                      numCon,
+                                      axis,
+                                      dis,
+                                      cenColorIndex)
 
             createHead.clicked.connect(build_head)
 
@@ -967,29 +967,29 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                 # TODO: handle custom side prefix
                 if sym_box.isChecked():
                     # left
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                           self.prefix_left(),
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           leftColorIndex)
+                    Tentacle.build(name,
+                                   self.prefix_left(),
+                                   moduleName,
+                                   numCon,
+                                   axis,
+                                   dis,
+                                   leftColorIndex)
                     # right
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                           self.prefixRight(),
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           rightColorIndex)
+                    Tentacle.build(name,
+                                   self.prefix_right(),
+                                   moduleName,
+                                   numCon,
+                                   axis,
+                                   dis,
+                                   rightColorIndex)
                 else:
-                    drLib.buildHeadNeckDummySkeletonModule(name,
-                                                        '',
-                                                           moduleName,
-                                                           numCon,
-                                                           axis,
-                                                           dis,
-                                                           cenColorIndex)
+                    Tentacle.build(name,
+                                   '',
+                                   moduleName,
+                                   numCon,
+                                   axis,
+                                   dis,
+                                   cenColorIndex)
 
             createTentacle.clicked.connect(build_tentacle)
 
@@ -1076,33 +1076,33 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
                 # TODO: handle custom side prefix
                 if side_combo.currentIndex() == 2:
                     # left
-                    drLib.fingerSegmentDummyBoneCreator(name,
-                                                        self.prefix_left(),
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        leftColorIndex)
+                    Fingers.build(name,
+                                  self.prefix_left(),
+                                  moduleName,
+                                  numCon,
+                                  axis,
+                                  dis,
+                                  leftColorIndex)
                     # right
-                    drLib.fingerSegmentDummyBoneCreator(name,
-                                                        self.prefixRight(),
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        rightColorIndex)
+                    Fingers.build(name,
+                                  self.prefix_right(),
+                                  moduleName,
+                                  numCon,
+                                  axis,
+                                  dis,
+                                  rightColorIndex)
                 else:
                     if side_combo.currentIndex() == 0:
                         side = self.prefix_left()
                     else:
-                        side = self.prefixRight()
-                    drLib.fingerSegmentDummyBoneCreator(name,
-                                                        side,
-                                                        moduleName,
-                                                        numCon,
-                                                        axis,
-                                                        dis,
-                                                        cenColorIndex)
+                        side = self.prefix_right()
+                        Fingers.build(name,
+                                      side,
+                                      moduleName,
+                                      numCon,
+                                      axis,
+                                      dis,
+                                      cenColorIndex)
 
             createArm.clicked.connect(build_finger)
 
@@ -1176,7 +1176,7 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
 
         h_layout = QHBoxLayout()
         skeleton_button = QPushButton('GENERATE SKELETON')
-        skeleton_button.clicked.connect(bmjs.buildModuleSkeleton)
+        skeleton_button.clicked.connect(bmjs.build_module_skeleton)
 
         rig_button = QPushButton('GENERATE RIG')
         rig_button.clicked.connect(self.build_rig)
@@ -1213,6 +1213,6 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
         sides = rigSideSep(self.side_prefix.currentText())
         return sides[0]
 
-    def prefixRight(self):
+    def prefix_right(self):
         sides = rigSideSep(self.side_prefix.currentText())
         return sides[1]

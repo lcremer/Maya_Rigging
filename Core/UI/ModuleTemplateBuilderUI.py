@@ -359,7 +359,7 @@ def ModuleTemplateUI():
     symmModuleBtn = pc.button('symmModuleBtn', l='Break Symmetry',  c=pc.Callback(msL.breakModuleSymConnection,''))
     mirrorModuleBtn = pc.button('mirrorModuleBtn', l='Mirror Seleted', c=pc.Callback(msL.mirrorModuleTemplates,''))
     OpModuledFormSep1 = pc.separator('OpModuledFormSep1', height=7, style='out', p=createSkColumnLayout)
-    buildModulesBtn = pc.button('buildModulesBtn', h=50, l='Build Skeleton', p=createSkColumnLayout, c=pc.Callback(bmjs.buildModuleSkeleton))
+    buildModulesBtn = pc.button('buildModulesBtn', h=50, l='Build Skeleton', p=createSkColumnLayout, c=pc.Callback(bmjs.build_module_skeleton))
     OpModuledFormSep2 = pc.separator('OpModuledFormSep2', height=7, style='out', p=createSkColumnLayout)
 
     templatesFrame = pc.frameLayout('templatesFrame', l='', collapsable=False, collapse=False, borderStyle='etchedIn', marginHeight=3, marginWidth=3, p=modulePartTab)

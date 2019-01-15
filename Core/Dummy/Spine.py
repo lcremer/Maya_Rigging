@@ -1,94 +1,92 @@
-import pymel.core as pc
+from Maya_UtilLib.Controls import build_world_pos_loc
 from Util import *
-from Maya_Rigging.Utils import List
-from Maya_Rigging.Utils import DummyUtil as dU
+from ...Utils import List
+from ...Utils import DummyUtil as dU
 
-def Spine(name, side, moduleName, numCon, axis, dis, colorIndex):
+
+def build(name, side, module_name, num_con, axis, dis, color_index):
     print('building Spine Dummy Skeleton Module')
     lock = ''
-    dummyBoneGrp = ''
-    jointPosList = ''
-    jointPosLists = []
+
     # create spineModule
-    spinePlacer = linearDisDummyBoneCreator(name, side, moduleName, numCon, axis, dis, colorIndex)
-    createModuleAnnotation((name+side+moduleName), spinePlacer)
-    chest = createModuleAnnotation((name+side+'chest'), (name+side+moduleName+str(numCon)+'_loc'))
-    pc.setAttr((chest+'.t'), (0, 0, 0))
+    spine_placer = linear_dis_dummy_bone_creator(name, side, module_name, num_con, axis, dis, color_index)
+    create_module_annotation((name + side + module_name), spine_placer)
+    chest = create_module_annotation((name + side + 'chest'), (name + side + module_name + str(num_con) + '_loc'))
+    pc.setAttr((chest + '.t'), (0, 0, 0))
 
     # negate pos value in order to get hips position opposite to the spine joint
-    pos = (dis/dis)*-1
+    pos = (dis / dis) * -1
 
-    hipsDummyJnt = createDummyJoint(colorIndex)
-    hipsDummyJnt[0] = pc.rename(hipsDummyJnt[0], (name+side+moduleName+'Hips_loc'))
-    # pc.scale(hipsDummyJnt[0], (0.7, 0.7, 0.7))
-    pc.addAttr(hipsDummyJnt[0], ln='jointPosList', dt='string')
-    pc.setAttr((hipsDummyJnt[0] + '.jointPosList'), hipsDummyJnt[0], type='string')
-    hips = createModuleAnnotation((name+side+'hips'), hipsDummyJnt[0])
-    pc.setAttr((hips+'.t'), (0, -1, 0))
+    hips_dummy_jnt = create_dummy_joint(color_index)
+    hips_dummy_jnt[0] = pc.rename(hips_dummy_jnt[0], (name + side + module_name + 'Hips_loc'))
+    pc.addAttr(hips_dummy_jnt[0], ln='jointPosList', dt='string')
+    pc.setAttr((hips_dummy_jnt[0] + '.jointPosList'), hips_dummy_jnt[0], type='string')
+    hips = create_module_annotation((name + side + 'hips'), hips_dummy_jnt[0])
+    pc.setAttr((hips + '.t'), (0, -1, 0))
 
-    pc.parent(hipsDummyJnt[0], spinePlacer)
+    pc.parent(hips_dummy_jnt[0], spine_placer)
 
-    jointPosList = pc.getAttr(spinePlacer + '.jointPosList')
-    jointPosLists = List.seperate(jointPosList)
-    dummyBoneGrp = createDummyBone(side, moduleName, jointPosLists[0], hipsDummyJnt[0])
+    joint_pos_list = pc.getAttr(spine_placer + '.jointPosList')
+    joint_pos_lists = List.seperate(joint_pos_list)
+    dummy_bone_grp = create_dummy_bone(side, module_name, joint_pos_lists[0], hips_dummy_jnt[0])
 
-    pc.addAttr(hipsDummyJnt[0], ln='parent', dt='string')
-    pc.setAttr((hipsDummyJnt[0] + '.parent'), jointPosLists[0], type='string')
+    pc.addAttr(hips_dummy_jnt[0], ln='parent', dt='string')
+    pc.setAttr((hips_dummy_jnt[0] + '.parent'), joint_pos_lists[0], type='string')
 
-    pc.addAttr(spinePlacer, ln='child', dt='string')
-    pc.setAttr((spinePlacer + '.child'), hipsDummyJnt[0], type='string')
+    pc.addAttr(spine_placer, ln='child', dt='string')
+    pc.setAttr((spine_placer + '.child'), hips_dummy_jnt[0], type='string')
 
     if axis == 'x' or axis == 'X':
-        pc.move(pos,0,0, hipsDummyJnt[0])
+        pc.move(pos, 0, 0, hips_dummy_jnt[0])
         lock = 'z'
     elif axis == 'y' or axis == 'Y':
-        pc.move(0,pos,0, hipsDummyJnt[0])
+        pc.move(0, pos, 0, hips_dummy_jnt[0])
         lock = 'x'
     elif axis == 'z' or axis == 'Z':
-        pc.move(0,0,pos, hipsDummyJnt[0])
+        pc.move(0, 0, pos, hips_dummy_jnt[0])
         lock = 'x'
 
-    pc.setAttr((hipsDummyJnt[0] + '.t' + lock), lock=True)
+    pc.setAttr((hips_dummy_jnt[0] + '.t' + lock), lock=True)
 
-    pc.setAttr((dummyBoneGrp+'.inheritsTransform'), 0)
+    pc.setAttr((dummy_bone_grp + '.inheritsTransform'), 0)
     try:
-        pc.parent(dummyBoneGrp, spinePlacer, r=True)
+        pc.parent(dummy_bone_grp, spine_placer, r=True)
     except:
         pass
     pc.select(cl=True)
 
     # create world pos loc and parent main arm placer ctrl...
-    worldPosLoc = buildWorldPosLoc(name)
-    if not pc.attributeQuery('spine', n=worldPosLoc, ex=True):
-        pc.addAttr(worldPosLoc, ln='spine', dt='string')
+    world_pos_loc = build_world_pos_loc(name)
+    if not pc.attributeQuery('spine', n=world_pos_loc, ex=True):
+        pc.addAttr(world_pos_loc, ln='spine', dt='string')
 
-    moduleParts = pc.getAttr(worldPosLoc + '.' + 'spine')
-    pc.setAttr((worldPosLoc + '.' + 'spine'), (str(moduleParts or '')+' '+spinePlacer), type='string')
+    module_parts = pc.getAttr(world_pos_loc + '.' + 'spine')
+    pc.setAttr((world_pos_loc + '.' + 'spine'), (str(module_parts or '') + ' ' + spine_placer), type='string')
 
-    pc.parent(spinePlacer, worldPosLoc)
+    pc.parent(spine_placer, world_pos_loc)
 
     # module tags
-    pc.addAttr(spinePlacer, ln='moduleTag', dt='string')
-    pc.addAttr(spinePlacer, ln='buildTag', dt='string')
+    pc.addAttr(spine_placer, ln='moduleTag', dt='string')
+    pc.addAttr(spine_placer, ln='buildTag', dt='string')
 
-    pc.setAttr((spinePlacer + '.moduleTag'), 'spine', type='string')
-    pc.setAttr((spinePlacer + '.buildTag'), worldPosLoc, type='string')
+    pc.setAttr((spine_placer + '.moduleTag'), 'spine', type='string')
+    pc.setAttr((spine_placer + '.buildTag'), world_pos_loc, type='string')
 
     # rig info Attr
-    spineList = pc.getAttr(spinePlacer + '.jointPosList')
-    spineJointsList = List.seperate(spineList)
-    size = len(spineJointsList)
+    spine_list = pc.getAttr(spine_placer + '.jointPosList')
+    spine_joints_list = List.seperate(spine_list)
+    size = len(spine_joints_list)
 
-    pc.addAttr(spinePlacer, ln='name', dt='string')
-    pc.setAttr((spinePlacer + '.name'), name, type='string')
-    pc.addAttr(spinePlacer, ln='side', dt='string')
-    pc.setAttr((spinePlacer + '.side'), side, type='string')
-    pc.addAttr(spinePlacer, ln=(side+'rootJoint'), dt='string')
-    pc.setAttr((spinePlacer + '.' + (side+'rootJoint')), spineJointsList[0], type='string')
-    pc.addAttr(spinePlacer, ln=(side+'chestJoint'), dt='string')
-    pc.setAttr((spinePlacer + '.' + (side+'chestJoint')), spineJointsList[size-1], type='string')
-    pc.addAttr(spinePlacer, ln=(side+'hipJoint'), dt='string')
-    pc.setAttr((spinePlacer + '.' + (side+'hipJoint')), hipsDummyJnt[0], type='string')
+    pc.addAttr(spine_placer, ln='name', dt='string')
+    pc.setAttr((spine_placer + '.name'), name, type='string')
+    pc.addAttr(spine_placer, ln='side', dt='string')
+    pc.setAttr((spine_placer + '.side'), side, type='string')
+    pc.addAttr(spine_placer, ln=(side + 'rootJoint'), dt='string')
+    pc.setAttr((spine_placer + '.' + (side + 'rootJoint')), spine_joints_list[0], type='string')
+    pc.addAttr(spine_placer, ln=(side + 'chestJoint'), dt='string')
+    pc.setAttr((spine_placer + '.' + (side + 'chestJoint')), spine_joints_list[size - 1], type='string')
+    pc.addAttr(spine_placer, ln=(side + 'hipJoint'), dt='string')
+    pc.setAttr((spine_placer + '.' + (side + 'hipJoint')), hips_dummy_jnt[0], type='string')
     pc.select(cl=True)
 
-    dU.add_dummy_twist_joints_attr(spinePlacer, jointPosLists[0], spineJointsList[size-1], 7)
+    dU.add_dummy_twist_joints_attr(spine_placer, joint_pos_lists[0], spine_joints_list[size - 1], 7)

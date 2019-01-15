@@ -29,7 +29,7 @@ def stretchNetwork(name,side, startJoint, endJoint, controller, type, midLock, m
     nonScaleGrp = (name+'non_scale_grp')
     scaleNode = (name+'worldScaleCon_grp')
 
-    nonScaleGrp = bw.createScaleGrp(name)
+    nonScaleGrp = bw.create_scale_grp(name)
 
     # get complete hierarchy of given joint
     list = chUL.findJointArray(startJoint, endJoint)
@@ -521,7 +521,7 @@ def buildIkStretch(name, side, startJoint, endJoint, controller, stretchType):
     nonScaleGrp = (name+'non_scale_grp')
     scaleNode = (name+'worldScaleCon_grp')
 
-    nonScaleGrp = bw.createNonScaleGrp(name)
+    nonScaleGrp = bw.create_non_scale_grp(name)
 
     stretchAxis = chUL.getStretchAxis(endJoint,stretchType)
     dist = chUL.createDistance(startJoint,endJoint)

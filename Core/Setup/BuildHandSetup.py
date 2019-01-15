@@ -1,4 +1,4 @@
-from Maya_Rigging.Core.BuildWorld import buildWorld
+from Maya_Rigging.Core.BuildWorld import build_world
 from Maya_Rigging.Utils.CharUtilsLib import *
 
 def buildHandSetup(name,
@@ -122,7 +122,7 @@ def buildHandSetup(name,
         lockAndHide(partGrp, 'locknHide', 'trans rot scale')
 
         if world:
-            cleanGrp = buildWorld(name, scale)
+            cleanGrp = build_world(name, scale)
             pc.parent(partGrp, cleanGrp[0])
 
         for i in range(numFingers):
