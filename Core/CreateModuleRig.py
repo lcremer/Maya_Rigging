@@ -1,6 +1,6 @@
 import pymel.core as pc
 
-import ModuleTemplateBuilderUI as modB
+#import ModuleTemplateBuilderUI as modB
 from Maya_Rigging.Utils import AttrUtil as atu
 from Maya_Rigging.Core.Setup import BuildArmSetup as bas
 from Maya_Rigging.Core.Setup import BuildBipedLegSetup as bbls
@@ -9,7 +9,7 @@ from Maya_Rigging.Core.Setup import BuildSpineSetup as bss
 from Maya_Rigging.Core.Setup import BuildEyeSetup as bes
 from Maya_Rigging.Core.Setup import BuildHandSetup as bhs
 from Maya_Rigging.Core.Setup import BuildNeckHeadSetup as bnhs
-from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsps
+#from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsps
 from Maya_Rigging.Core.Setup import BuildTentacleSetup as bts
 
 from Maya_Rigging.Utils import CharUtilsLib as chUL
@@ -63,52 +63,53 @@ def createRig(ikfk='',
 
     if pc.objExists('masterRigPartsHolder_node'):
         moduleList = ''
-        
+
         if pc.attributeQuery('spineRigParts', n='masterRigPartsHolder_node', ex=True):
             spineModule = pc.getAttr('masterRigPartsHolder_node.spineRigParts')
-            moduleList = moduleList + (spineModule+' ')
-            
+            moduleList = moduleList + (spineModule + ' ')
+
         if pc.attributeQuery('neckHeadRigParts', n='masterRigPartsHolder_node', ex=True):
             neckModule = pc.getAttr('masterRigPartsHolder_node.neckHeadRigParts')
-            moduleList = moduleList + (neckModule+' ')
+            moduleList = moduleList + (neckModule + ' ')
 
         if pc.attributeQuery('tentacleRigParts', n='masterRigPartsHolder_node', ex=True):
             tentModule = pc.getAttr('masterRigPartsHolder_node.tentacleRigParts')
-            moduleList = moduleList + (tentModule+' ')
+            moduleList = moduleList + (tentModule + ' ')
 
         if pc.attributeQuery('armRigParts', n='masterRigPartsHolder_node', ex=True):
             armModule = pc.getAttr('masterRigPartsHolder_node.armRigParts')
-            moduleList = moduleList + (armModule+' ')
+            moduleList = moduleList + (armModule + ' ')
 
         if pc.attributeQuery('legRigParts', n='masterRigPartsHolder_node', ex=True):
             legModule = pc.getAttr('masterRigPartsHolder_node.legRigParts')
-            moduleList = moduleList + (legModule+' ')
-            
+            moduleList = moduleList + (legModule + ' ')
+
         moduleInf = List.seperate(moduleList)
 
         # error checking........
         if pc.attributeQuery('spineRigParts', n='masterRigPartsHolder_node', ex=True):
             spineRigPart = pc.getAttr('masterRigPartsHolder_node.spineRigParts')
             spineRigPartArray = List.seperate(spineRigPart)
-            for i in range(len(spineRigPartArray)):                
+            for i in range(len(spineRigPartArray)):
                 if not pc.attributeQuery('joints', n=spineRigPartArray[i], ex=True):
-                    pc.error('You must specify number of joints on '+spineRigPartArray[i]+' for SPINE setup')
+                    pc.error('You must specify number of joints on ' + spineRigPartArray[i] + ' for SPINE setup')
 
         if pc.attributeQuery('neckHeadRigParts', n='masterRigPartsHolder_node', ex=True):
             neckHeadRigPart = pc.getAttr('masterRigPartsHolder_node.neckHeadRigParts')
             neckHeadRigPartArray = List.seperate(neckHeadRigPart)
             for i in range(len(neckHeadRigPartArray)):
                 if not pc.attributeQuery('joints', n=neckHeadRigPartArray[i], ex=True):
-                    pc.error('You must specify number of joints on '+neckHeadRigPartArray[i]+' for NECK setup')
+                    pc.error('You must specify number of joints on ' + neckHeadRigPartArray[i] + ' for NECK setup')
 
         if pc.attributeQuery('tentacleRigParts', n='masterRigPartsHolder_node', ex=True):
             tentacleRigPart = pc.getAttr('masterRigPartsHolder_node.tentacleRigParts')
             tentacleRigPartArray = List.seperate(tentacleRigPart)
             for i in range(len(tentacleRigPartArray)):
                 if not pc.attributeQuery('joints', n=tentacleRigPartArray[i], ex=True):
-                    pc.error('You must specify number of joints on '+tentacleRigPartArray[i]+' for TENTACLE setup')
+                    pc.error('You must specify number of joints on ' + tentacleRigPartArray[i] + ' for TENTACLE setup')
 
-        pc.progressWindow(t='Building Anim Rig', progress=0, status='building animation rig from skeleton :', min=0, max=len(moduleInf), isInterruptable=True)
+        pc.progressWindow(t='Building Anim Rig', progress=0, status='building animation rig from skeleton :', min=0,
+                          max=len(moduleInf), isInterruptable=True)
         pc.select(cl=True)
         pc.symmetricModelling(e=True, symmetry=False)
         pc.softSelect(e=True, softSelectEnabled=False)
@@ -116,26 +117,26 @@ def createRig(ikfk='',
 
         if pc.attributeQuery('spineRigParts', n='masterRigPartsHolder_node', ex=True):
             for i in range(len(spineRigPartArray)):
-                name = pc.getAttr(spineRigPartArray[i]+'.name')
-                side = pc.getAttr(spineRigPartArray[i]+'.sides')
+                name = pc.getAttr(spineRigPartArray[i] + '.name')
+                side = pc.getAttr(spineRigPartArray[i] + '.sides')
                 controlColor = get_control_color(side, colorRight, colorCenter, colorLeft)
-                spineRigCmdPart = pc.getAttr(spineRigPartArray[i]+'.spineRig')
+                spineRigCmdPart = pc.getAttr(spineRigPartArray[i] + '.spineRig')
                 spineRigCmdArray = List.seperate(spineRigCmdPart)
 
                 dis = chUL.getChainLength(spineRigCmdArray[0], spineRigCmdArray[1])
-                scale = dis/3
+                scale = dis / 3
                 dis = 0
-                
+
                 pc.catch(pc.deleteAttr(spineRigPartArray[i], attribute='name'))
                 pc.catch(pc.deleteAttr(spineRigPartArray[i], attribute='sides'))
                 pc.catch(pc.deleteAttr(spineRigPartArray[i], attribute='spineRig'))
 
-                numJoints = pc.getAttr(spineRigPartArray[i]+'.joints')
+                numJoints = pc.getAttr(spineRigPartArray[i] + '.joints')
 
                 pc.select(spineRigPartArray[i], r=True)
                 atu.removeTwistJointsAttr('joints')
                 pc.select(cl=True)
-                
+
                 bss.buildSpineSetup(name,
                                     side,
                                     spineRigCmdArray[0],
@@ -154,37 +155,37 @@ def createRig(ikfk='',
                     pc.progressWindow(endProgress=True)
                     pc.undoInfo(state=True)
                     return
-                pc.progressWindow(e=True, step=1, status=('building anim rig on : '+spineRigPartArray[i]))
+                pc.progressWindow(e=True, step=1, status=('building anim rig on : ' + spineRigPartArray[i]))
 
         if pc.attributeQuery('neckHeadRigParts', n='masterRigPartsHolder_node', ex=True):
             for i in range(len(neckHeadRigPartArray)):
-                name = pc.getAttr(neckHeadRigPartArray[i]+'.name')
-                side = pc.getAttr(neckHeadRigPartArray[i]+'.sides')
+                name = pc.getAttr(neckHeadRigPartArray[i] + '.name')
+                side = pc.getAttr(neckHeadRigPartArray[i] + '.sides')
                 controlColor = get_control_color(side, colorRight, colorCenter, colorLeft)
-                neckHeadRigCmdPart = pc.getAttr(neckHeadRigPartArray[i]+'.neckHeadRig')
+                neckHeadRigCmdPart = pc.getAttr(neckHeadRigPartArray[i] + '.neckHeadRig')
                 neckHeadRigCmdArray = List.seperate(neckHeadRigCmdPart)
-                
-                eyeRigCmdPart = pc.getAttr(neckHeadRigPartArray[i]+'.eyeRig')
+
+                eyeRigCmdPart = pc.getAttr(neckHeadRigPartArray[i] + '.eyeRig')
                 eyeRigCmdArray = List.seperate(eyeRigCmdPart)
-                
+
                 pc.catch(pc.deleteAttr(neckHeadRigPartArray[i], attribute='name'))
                 pc.catch(pc.deleteAttr(neckHeadRigPartArray[i], attribute='sides'))
                 pc.catch(pc.deleteAttr(neckHeadRigPartArray[i], attribute='neckHeadRig'))
                 pc.catch(pc.deleteAttr(neckHeadRigPartArray[i], attribute='eyeRig'))
 
-                numJoints = pc.getAttr(neckHeadRigPartArray[i]+'.joints')
+                numJoints = pc.getAttr(neckHeadRigPartArray[i] + '.joints')
                 pc.select(neckHeadRigPartArray[i], r=True)
                 atu.removeTwistJointsAttr('joints')
                 pc.select(cl=True)
-                
+
                 list = chUL.findJointArray(neckHeadRigCmdArray[0], neckHeadRigCmdArray[1])
-                dis = chUL.getChainLength(neckHeadRigCmdArray[0],neckHeadRigCmdArray[1])                
+                dis = chUL.getChainLength(neckHeadRigCmdArray[0], neckHeadRigCmdArray[1])
                 if len(list) > 2:
-                    scale = dis/2
+                    scale = dis / 2
                 else:
                     scale = dis
                 dis = 0
-                    
+
                 bnhs.buildNeckHeadSetup(name,
                                         side,
                                         neckHeadRigCmdArray[0],
@@ -206,10 +207,10 @@ def createRig(ikfk='',
                                   colorCenter,
                                   colorLeft)
                 if pc.progressWindow(q=True, isCancelled=True):
-                   pc.progressWindow( endProgress=True)
-                   pc.undoInfo(state=True)
-                   return
-                pc.progressWindow(e=True, step=1, status=('building anim rig on : '+neckHeadRigPartArray[i]))
+                    pc.progressWindow(endProgress=True)
+                    pc.undoInfo(state=True)
+                    return
+                pc.progressWindow(e=True, step=1, status=('building anim rig on : ' + neckHeadRigPartArray[i]))
 
         if pc.attributeQuery('tentacleRigParts', n='masterRigPartsHolder_node', ex=True):
 
@@ -227,19 +228,19 @@ def createRig(ikfk='',
                 type = pc.getAttr(tentacleRigPartArray[i] + '.types')
                 tentacleRigCmdPart = pc.getAttr(tentacleRigPartArray[i] + '.tentacleRig')
                 tentacleRigCmdArray = List.seperate(tentacleRigCmdPart)
-                
+
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='name'))
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='sides'))
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='types'))
                 pc.catch(pc.deleteAttr(tentacleRigPartArray[i], attribute='tentacleRig'))
-                
+
                 numJoints = pc.getAttr(tentacleRigPartArray[i] + '.joints')
                 pc.select(tentacleRigPartArray[i], r=True)
                 atu.removeTwistJointsAttr('joints')
                 pc.select(cl=True)
-                
+
                 dis = chUL.getChainLength(tentacleRigCmdArray[0], tentacleRigCmdArray[1])
-                scale = dis/9
+                scale = dis / 9
                 dis = 0
 
                 bts.buildTentacleSetup(name,
@@ -249,7 +250,7 @@ def createRig(ikfk='',
                                        offset,
                                        'plus',
                                        dynamic,
-                                       (side+type),
+                                       (side + type),
                                        stretchType,
                                        stretch,
                                        numJoints,
@@ -261,44 +262,44 @@ def createRig(ikfk='',
                     pc.progressWindow(endProgress=True)
                     pc.undoInfo(state=True)
                     return
-                pc.progressWindow(e=True, step=1, status=('building anim rig on : '+tentacleRigPartArray[i]))
+                pc.progressWindow(e=True, step=1, status=('building anim rig on : ' + tentacleRigPartArray[i]))
 
         if pc.attributeQuery('armRigParts', n='masterRigPartsHolder_node', ex=True):
             armRigPart = pc.getAttr('masterRigPartsHolder_node.armRigParts')
             armRigPartArray = List.seperate(armRigPart)
             for i in range(len(armRigPartArray)):
-                name = pc.getAttr(armRigPartArray[i]+'.name')
-                side = pc.getAttr(armRigPartArray[i]+'.sides')
+                name = pc.getAttr(armRigPartArray[i] + '.name')
+                side = pc.getAttr(armRigPartArray[i] + '.sides')
                 controlColor = get_control_color(side, colorRight, colorCenter, colorLeft)
 
-                armRigCmdPart = pc.getAttr(armRigPartArray[i]+'.armRig')
+                armRigCmdPart = pc.getAttr(armRigPartArray[i] + '.armRig')
                 armRigCmdArray = List.seperate(armRigCmdPart)
-                
+
                 fingerName = []
                 startJoint = []
                 fingers = ''
                 numFingers = ''
                 fingerRotAxis = []
                 fingerCheck = 0
-                
+
                 if pc.attributeQuery('fingers', n=armRigPartArray[i], ex=True):
-                    fingerName = ['thumb','index','mid','ring','pinky']
-                    fingers = pc.getAttr(armRigPartArray[i]+'.fingers')
+                    fingerName = ['thumb', 'index', 'mid', 'ring', 'pinky']
+                    fingers = pc.getAttr(armRigPartArray[i] + '.fingers')
                     startJoint = List.seperate(fingers)
-                    
+
                     numFingers = len(startJoint)
                     fingerRotAxis = chUL.getFingerAxisFigures(startJoint[0])
                     fingerCheck = 1
-                    
+
                 pc.catch(pc.deleteAttr(armRigPartArray[i], attribute='name'))
                 pc.catch(pc.deleteAttr(armRigPartArray[i], attribute='sides'))
                 pc.catch(pc.deleteAttr(armRigPartArray[i], attribute='armRig'))
                 pc.catch(pc.deleteAttr(armRigPartArray[i], attribute='fingers'))
-                
-                dis = chUL.getChainLength(armRigCmdArray[0],armRigCmdArray[1])
-                scale = dis/7
+
+                dis = chUL.getChainLength(armRigCmdArray[0], armRigCmdArray[1])
+                scale = dis / 7
                 dis = 0
-                
+
                 bas.buildArmSetup(name,
                                   side,
                                   armRigCmdArray[0],
@@ -331,7 +332,7 @@ def createRig(ikfk='',
                     pc.progressWindow(endProgress=True)
                     pc.undoInfo(state=True)
                     return
-                pc.progressWindow(e=True, step=1, status=('building anim rig on : '+armRigPartArray[i]))
+                pc.progressWindow(e=True, step=1, status=('building anim rig on : ' + armRigPartArray[i]))
 
         if pc.attributeQuery('legRigParts', n='masterRigPartsHolder_node', ex=True):
             legRigPart = pc.getAttr('masterRigPartsHolder_node.legRigParts')
@@ -347,28 +348,28 @@ def createRig(ikfk='',
                 fingerRotAxis = []
                 fingerCheck = 0
                 tempFinger = ''
-                
-                name = pc.getAttr(legRigPartArray[i]+'.name')
-                side = pc.getAttr(legRigPartArray[i]+'.sides')
+
+                name = pc.getAttr(legRigPartArray[i] + '.name')
+                side = pc.getAttr(legRigPartArray[i] + '.sides')
                 controlColor = get_control_color(side, colorRight, colorCenter, colorLeft)
-                legType = pc.getAttr(legRigPartArray[i]+'.legType')
-                
+                legType = pc.getAttr(legRigPartArray[i] + '.legType')
+
                 if pc.attributeQuery('fingers', n=legRigPartArray[i], ex=True):
-                    fingerCmd = pc.getAttr(legRigPartArray[i]+'.fingers')
+                    fingerCmd = pc.getAttr(legRigPartArray[i] + '.fingers')
                     fingerCheck = 1
-                    
-                legRigCmdPart = pc.getAttr(legRigPartArray[i]+'.legRig')
-                legRigCmdArray = List.seperate(legRigCmdPart )
-                
+
+                legRigCmdPart = pc.getAttr(legRigPartArray[i] + '.legRig')
+                legRigCmdArray = List.seperate(legRigCmdPart)
+
                 # NOTE: these were catch quite
                 pc.catch(pc.deleteAttr(legRigPartArray[i], attribute='name'))
                 pc.catch(pc.deleteAttr(legRigPartArray[i], attribute='sides'))
                 pc.catch(pc.deleteAttr(legRigPartArray[i], attribute='legRig'))
                 pc.catch(pc.deleteAttr(legRigPartArray[i], attribute='fingers'))
                 pc.catch(pc.deleteAttr(legRigPartArray[i], attribute='legType'))
-                
-                dis = chUL.getChainLength(legRigCmdArray[0],legRigCmdArray[1])
-                scale = dis/7
+
+                dis = chUL.getChainLength(legRigCmdArray[0], legRigCmdArray[1])
+                scale = dis / 7
                 dis = 0
 
                 if legType == 'bipedLeg':
@@ -406,7 +407,7 @@ def createRig(ikfk='',
                         fingerName = ['thumb', 'index', 'mid', 'ring', 'pinky']
                         fingers = fingerCmd
                         startJoint = List.seperate(fingers)
-                        
+
                         numFingers = len(startJoint)
                         fingerRotAxis = chUL.getFingerAxisFigures(startJoint[0])
                     elif legType == 'quadLeg':
@@ -414,14 +415,15 @@ def createRig(ikfk='',
                         fingers = fingerCmd
                         quadFinger = List.seperate(fingers)
                         for x in range(len(quadFinger)):
-                            tempFinger = buildQuadFingerIkSetup(quadFinger[x],legRigCmdArray[(len(legRigCmdArray)-1)])
+                            tempFinger = buildQuadFingerIkSetup(quadFinger[x],
+                                                                legRigCmdArray[(len(legRigCmdArray) - 1)])
                             newFinger = newFinger + ' ' + tempFinger
-                            
+
                         startJoint = List.seperate(newFinger)
-                        
+
                         numFingers = len(startJoint)
                         fingerRotAxis = chUL.getFingerAxisFigures(startJoint[0])
-                        
+
                     bhs.buildHandSetup(name,
                                        side,
                                        (name + side + 'legSwitches_ctrl'),
@@ -441,7 +443,7 @@ def createRig(ikfk='',
                     pc.progressWindow(endProgress=True)
                     pc.undoInfo(state=True)
                     return
-                pc.progressWindow(e=True, step=1, status=('building anim rig on : '+legRigPartArray[i]))
+                pc.progressWindow(e=True, step=1, status=('building anim rig on : ' + legRigPartArray[i]))
 
         pc.delete('masterRigPartsHolder_node')
         pc.progressWindow(endProgress=True)
@@ -451,18 +453,18 @@ def createRig(ikfk='',
 
 def buildQuadFingerIkSetup(joint, parent):
     list = chUL.listHierarchy(joint)
-    IK = chUL.dupId(joint,'suffix','ik')
-    pc.parent(IK[0],parent)
+    IK = chUL.dupId(joint, 'suffix', 'ik')
+    pc.parent(IK[0], parent)
 
-    for i in range(len(list)-1):
+    for i in range(len(list) - 1):
         strip = objGetPrefix(list[i])
         ikhName = (strip + '_ikh')
-        ikHandleA = pc.ikHandle(name=(ikhName), startJoint=list[i], endEffector=list[i+1], solver='ikSCsolver')
+        ikHandleA = pc.ikHandle(name=(ikhName), startJoint=list[i], endEffector=list[i + 1], solver='ikSCsolver')
         pc.hide(ikHandleA[0])
-        pc.parent(ikHandleA[0],IK[i])
-        chUL.lockAndHide(ikHandleA[0],'lock','trans rot vis')
+        pc.parent(ikHandleA[0], IK[i])
+        chUL.lockAndHide(ikHandleA[0], 'lock', 'trans rot vis')
         pc.select(cl=True)
-        
+
     return IK[0]
 
 

@@ -8,7 +8,7 @@ from ..Core.Dummy import *
 from ..Core.Dummy.Leg import *
 from ..Core import ModuleSymmetryLib as msLib
 from ..Core import BuildModuleJointSkeleton as bmjs
-from ..Core.UI import CreateModuleRigFromUI as cmr
+from ..Core import CreateModuleRig as cmr
 from ..Core import ModuleTemplates as mt
 
 from CollapsibleButton import CollapsibleButton
