@@ -8,7 +8,7 @@ from pymel import core as pm
 
 def menu_item():
     pm.menuItem(parent=ui_name, subMenu=True, tearOff=True, label='Rigging')
-    pm.menuItem(label='Auto Rig', command=partial(Maya_Rigging.UI.AutoRig.Open))
+    pm.menuItem(label='Auto Rig', command=partial(Maya_Rigging.UI.AutoRig.open))
 
 
 def add_menu_item():
