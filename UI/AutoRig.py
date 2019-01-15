@@ -1202,7 +1202,7 @@ class DockableWidget(MayaQWidgetDockableMixin, QWidget):
         # self.center_cb = ColorSpinBox(h_layout, 'Center', 15)
         # self.left_cb = ColorSpinBox(h_layout, 'Left', 26)
 
-        cmr.createRig(
+        cmr.create_rig(
             # TODO: properly populate this
             ikfk='constrain',
             stretch=str(self.stretch_combobox.currentText()),

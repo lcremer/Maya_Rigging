@@ -3,6 +3,7 @@ import re
 import copy
 import math
 import List as List
+from Maya_UtilLib import Units
 
 from String import *
 from Transform import *
@@ -386,7 +387,7 @@ def createDistance(start_joint, end_joint):
     return result
 
 
-# This little function return length joint chain
+# This little function returns length of joint chain
 def getChainLength(startJoint, endJoint):
     temp = []
     dis = 0.0
@@ -400,10 +401,10 @@ def getChainLength(startJoint, endJoint):
         for i in range(len(list)-1):
             child = getChildJoint(list[i])
             temp = createDistance(list[i], child)
-            shape = pc.listRelatives(temp[0], s=True)            
+            shape = pc.listRelatives(temp[0], s=True)
             dis = dis + pc.getAttr(shape[0]+".distance")
             pc.delete(temp)
-    return dis
+    return Units.distance_to_scene_units(dis)
 
 
 def getStretchAxis(obj, type):

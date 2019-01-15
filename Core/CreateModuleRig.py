@@ -1,6 +1,5 @@
 import pymel.core as pc
 
-#import ModuleTemplateBuilderUI as modB
 from Maya_Rigging.Utils import AttrUtil as atu
 from Maya_Rigging.Core.Setup import BuildArmSetup as bas
 from Maya_Rigging.Core.Setup import BuildBipedLegSetup as bbls
@@ -9,7 +8,6 @@ from Maya_Rigging.Core.Setup import BuildSpineSetup as bss
 from Maya_Rigging.Core.Setup import BuildEyeSetup as bes
 from Maya_Rigging.Core.Setup import BuildHandSetup as bhs
 from Maya_Rigging.Core.Setup import BuildNeckHeadSetup as bnhs
-#from Maya_Rigging.Core.Setup import BuildSpaceSwitchSetup as bsps
 from Maya_Rigging.Core.Setup import BuildTentacleSetup as bts
 
 from Maya_Rigging.Utils import CharUtilsLib as chUL
@@ -17,13 +15,13 @@ from Maya_Rigging.Utils import List
 from Maya_Rigging.Utils.String import *
 
 
-def createRig(ikfk='',
-              stretch='',
-              midLock='',
-              volume='',
-              colorRight=10,
-              colorCenter=15,
-              colorLeft=26):
+def create_rig(ikfk='',
+               stretch='',
+               midLock='',
+               volume='',
+               colorRight=10,
+               colorCenter=15,
+               colorLeft=26):
     spineRigPart = ''
     spineRigPartArray = []
     neckHeadRigPart = ''
@@ -84,6 +82,7 @@ def createRig(ikfk='',
             legModule = pc.getAttr('masterRigPartsHolder_node.legRigParts')
             moduleList = moduleList + (legModule + ' ')
 
+        # TODO: can probably refactor this to remove the need for List to seperate the elements
         moduleInf = List.seperate(moduleList)
 
         # error checking........

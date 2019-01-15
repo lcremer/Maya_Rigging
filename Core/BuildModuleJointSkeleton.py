@@ -46,7 +46,10 @@ def build_confirmed(sel):
     pc.progressWindow('buildSkeletonProgress', t='building Skeleton', progress=0,
                       status='building skeleton from modules :', min=0, max=len(module_inf), isInterruptable=True)
 
+    # TODO: find a way to auto iterate through list of build modules, so this doesn't have to be updated as new modules
+    #  are added
     build_spine(sel)
+    # TODO: look into how modules head vs neck vs both are determined
     build_neck_head(sel)
     build_leg(sel)
     build_arm(sel)
@@ -81,6 +84,7 @@ def get_module_list(sel):
 
 
 def build_spine(sel):
+    # checking if the rig has a spine module
     if pc.attributeQuery('spine', n=sel[0], ex=True):
         spine_main_placer = pc.getAttr(sel[0] + '.spine')
         spine_module_lists = List.seperate(spine_main_placer)
