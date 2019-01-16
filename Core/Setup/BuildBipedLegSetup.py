@@ -136,7 +136,7 @@ def buildBipedLegSetup(name,
 
     # check stretch condition and create connections
     if stretch == 1:
-        js.stretchNetwork(name, side, ('ik_' + hipJoint),('ik_' + ankleJoint), ankleCtrl[0], stretchType, midLock, kneeCtrl[0])
+        js.stretch_network(name, side, ('ik_' + hipJoint), ('ik_' + ankleJoint), ankleCtrl[0], stretchType, midLock, kneeCtrl[0])
         stretchTypeConnect(list, IK, FK, stretchType, switchCtrl[0])
 
     # creating twist joint setup if attribute exists on given joint

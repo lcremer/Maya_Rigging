@@ -116,8 +116,8 @@ def build_arm_setup(name,
 
     # check stretch condition and create connections
     if stretch == 1:
-        js.stretchNetwork(name, side, ('ik_' + shoulder_joint), ('ik_' + wrist_joint), wristCtrl[0], stretch_type, mid_lock,
-                          elbowCtrl[0])
+        js.stretch_network(name, side, ('ik_' + shoulder_joint), ('ik_' + wrist_joint), wristCtrl[0], stretch_type, mid_lock,
+                           elbowCtrl[0])
         chUL.stretchTypeConnect(list, IK, FK, stretch_type, switchCtrl[0])
 
     # creating twist joint setup if attribute exists on given joint
@@ -326,7 +326,7 @@ def buildClavSetup(name, side, clavJoint, shoulderJoint, stretch, scale, control
         pc.makeIdentity(offControl[0], apply=True, t=1, r=1, s=1)
         offGrp = chUL.quickZeroOut(offControl[0])
         chUL.lockAndHide(offControl[0], 'locknHide', 'rot scale vis')
-        sScmd = js.buildIkStretch(name, side, clavJoint, shoulderJoint, offControl[0], 'scale')
+        sScmd = js.build_ik_stretch(name, side, clavJoint, shoulderJoint, offControl[0], 'scale')
         pc.parent(offGrp[0], control[0])
         pc.parent(sScmd[0], control[0])
         chUL.lockAndHide(offGrp[0], 'lock', 'trans rot scale vis')

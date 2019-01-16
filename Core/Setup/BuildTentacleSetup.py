@@ -152,7 +152,7 @@ def buildTentacleSetup(name,
             pc.skinCluster(list, curve, tsb=True, mi=4, dr=7)
 
     if stretch:
-        js.stretchySpline (name, '', allControls[0], stretchType, curve, 1, volume, scaleNode)
+        js.stretchy_spline (name, '', allControls[0], stretchType, curve, 1, volume, scaleNode)
 
     if dynamics:
         pc.select(curve, r=True)

@@ -247,7 +247,7 @@ def buildTwistJointSetup(name, side, joint, stretchType, ikFkType, rotConnect, w
             if volume:
                 newJoints.insert(0, joint)
                 pc.refresh
-                js.makeJointVolumeSetup(name, side, controller, stretchType, newJoints)
+                js.make_joint_volume_setup(name, side, controller, stretchType, newJoints)
     return newJoints
 
 # based of Jason Schleifer's code

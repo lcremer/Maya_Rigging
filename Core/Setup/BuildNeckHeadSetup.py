@@ -1,8 +1,8 @@
 import pymel.core as pc
 from BuildSpaceSwitchSetup import buildSpaceSwitchSetup
 from Maya_Rigging.Core.BuildWorld import build_world
-from ..JointStretchNetworkLib import buildIkStretch
-from ..JointStretchNetworkLib import stretchySpline
+from ..JointStretchNetworkLib import build_ik_stretch
+from ..JointStretchNetworkLib import stretchy_spline
 from ...Utils.CharUtilsLib import addSkinJointToSet
 from ...Utils.CharUtilsLib import createSkinJointSet
 from ...Utils.CharUtilsLib import findJointArray
@@ -176,7 +176,7 @@ def multiBoneHeadNeckSetup(name, side, neckJoint, headJoint, stretchType, numJoi
     pc.skinCluster(allControls, headControl[0], curve, tsb=True, mi=4, dr=7)
 
     if stretch:
-        stretchySpline(name, side, headControl[0], stretchType, curve, 1, volume, scaleNode)
+        stretchy_spline(name, side, headControl[0], stretchType, curve, 1, volume, scaleNode)
 
     parentJoint = pc.listRelatives(neckJoint, parent=True)
     if parentJoint[0] != '':
@@ -373,7 +373,7 @@ def headNeckSetup(name, side, neckJoint, headJoint, stretchType, numJoints, stre
         pc.setAttr((ikNeckJoint[0] + '.visibility'),0)
         lockAndHide(ikNeckJoint[0],'lock','vis')
         
-        sScmd = buildIkStretch(name,side,ikNeckJoint[0], ikHeadJoint[0], headControl[0], stretchType)
+        sScmd = build_ik_stretch(name, side, ikNeckJoint[0], ikHeadJoint[0], headControl[0], stretchType)
         pc.parent(sScmd[0], neckControl[0])
         
         parentJoint = pc.listRelatives(neckJoint, parent=True)
@@ -383,7 +383,7 @@ def headNeckSetup(name, side, neckJoint, headJoint, stretchType, numJoints, stre
         pc.parentConstraint(neckControl[0], neckJoint, mo=True, w=1)
         pc.parentConstraint(headControl[0], headJoint, mo=True, w=1)
         if numJoints>1:
-            stretchySpline(name, side, headControl[0], stretchType, curve, 1, volume, scaleNode)
+            stretchy_spline(name, side, headControl[0], stretchType, curve, 1, volume, scaleNode)
             pc.skinCluster(ikNeckJoint[0], ikHeadJoint[0], curve, tsb=True, mi=4, dr=7)
 
     else:

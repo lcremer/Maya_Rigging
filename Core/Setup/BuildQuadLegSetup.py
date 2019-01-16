@@ -150,7 +150,7 @@ def buildQuadLegSetup(name,
     # check stretch condition and create connections
     hockJointPos = pc.xform(hockJoint, q=True, worldSpace=True, rotatePivot=True)
     if stretch == 1:
-        js.stretchNetwork(name, side, ('ik_' + hipJoint),('ik_' + hockJoint), ankleCtrl[0], stretchType, midLock, kneeCtrl[0])
+        js.stretch_network(name, side, ('ik_' + hipJoint), ('ik_' + hockJoint), ankleCtrl[0], stretchType, midLock, kneeCtrl[0])
         chUL.stretchTypeConnect(list, IK, FK, stretchType, switchCtrl[0])        
 
     # some stretch corrrection purely name specific might not run on different case remember that..

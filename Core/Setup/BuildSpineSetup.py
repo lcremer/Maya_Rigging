@@ -179,7 +179,7 @@ def buildSpineSetup(name,
     pc.parentConstraint(posAClts[1], rootJoint, mo=True, w=1)
 
     if stretch:
-        js.stretchySpline(name, side, allControls[0], stretchType, curve, 1, volume, scaleNode)
+        js.stretchy_spline(name, side, allControls[0], stretchType, curve, 1, volume, scaleNode)
 
     pc.parent(hipGrp[0], allControls[0])
     pc.parent(controlGrp[0], partGrp)
