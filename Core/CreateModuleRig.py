@@ -299,18 +299,18 @@ def create_rig(ikfk='',
                 scale = dis / 7
                 dis = 0
 
-                bas.buildArmSetup(name,
-                                  side,
-                                  armRigCmdArray[0],
-                                  armRigCmdArray[1],
-                                  stretchType,
-                                  ikFkType,
-                                  stretch,
-                                  midLock,
-                                  volume,
-                                  world,
-                                  scale,
-                                  controlColor)
+                bas.build_arm_setup(name,
+                                    side,
+                                    armRigCmdArray[0],
+                                    armRigCmdArray[1],
+                                    stretchType,
+                                    ikFkType,
+                                    stretch,
+                                    midLock,
+                                    volume,
+                                    world,
+                                    scale,
+                                    controlColor)
                 if fingerCheck:
                     bhs.buildHandSetup(name,
                                        side,

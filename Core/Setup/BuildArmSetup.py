@@ -9,42 +9,42 @@ from ...Utils import Transform as tr
 from ...Utils.CharUtilsLib import *
 
 
-def buildArmSetup(name,
-                  side,
-                  shoulderJoint,
-                  wristJoint,
-                  stretchType,
-                  ikFkType,
-                  stretch,
-                  midLock,
-                  volume,
-                  world,
-                  scale,
-                  controlColor):
+def build_arm_setup(name,
+                    side,
+                    shoulder_joint,
+                    wrist_joint,
+                    stretch_type,
+                    ik_fk_type,
+                    stretch,
+                    mid_lock,
+                    volume,
+                    world,
+                    scale,
+                    control_color):
     FK = []  # array to hold fk joint chain
     IK = []  # array to hold fk joint chain
     list = []  # array to hold actual joint chain
     temp = []  # hold name unused joint to delete
     middleIndex = 0  # hold middle index of ik joint chain
-    modPos = []  # hold mid postion for pole vectoe control
+    modPos = []  # hold mid position for pole vector control
     ikHandle = []  # hold all created ik handle
     fkContrlList = []  # array to hold fk control joint chain
-    fkCon = []  # array to hold newly creted fk control
+    fkCon = []  # array to hold newly created fk control
     tempJoint = []  # array to hold temp created joint
     stretchAxis = []  # array to stretch axis info
     parentGrp = []  # holds name of parent grp of given object
-    cleanGrp = []
+    clean_grp = []
 
-    partGrp = pc.group(em=True, n=(name + side + 'armParts_grp'))
-    chUL.lockAndHide(partGrp, 'locknHide', 'trans rot scale')
+    part_grp = pc.group(em=True, n=(name + side + 'armParts_grp'))
+    chUL.lockAndHide(part_grp, 'locknHide', 'trans rot scale')
 
     if world:
-        cleanGrp = bw.build_world(name, scale)
-        pc.parent(partGrp, cleanGrp[0])
+        clean_grp = bw.build_world(name, scale)
+        pc.parent(part_grp, clean_grp[0])
 
     # duplicate joint chain twice in order to create ik fk switch
-    FK = chUL.dupId(shoulderJoint, 'prefix', 'fk')
-    IK = chUL.dupId(shoulderJoint, 'prefix', 'ik')
+    FK = chUL.dupId(shoulder_joint, 'prefix', 'fk')
+    IK = chUL.dupId(shoulder_joint, 'prefix', 'ik')
 
     # delete twistAttr from FK and IK joint chains if it exists
     for x in range(len(FK)):
@@ -57,58 +57,58 @@ def buildArmSetup(name,
             atu.removeTwistJointsAttr('twistJoints')
 
     # check if duplicated joint has any child joints and delete them
-    temp = pc.listRelatives(('ik_' + wristJoint), allDescendents=True)
+    temp = pc.listRelatives(('ik_' + wrist_joint), allDescendents=True)
     if temp[0] != '':
         pc.delete(temp)
 
     # check if duplicated joint has any child joints and delete them
-    temp = pc.listRelatives(('fk_' + wristJoint), allDescendents=True)
+    temp = pc.listRelatives(('fk_' + wrist_joint), allDescendents=True)
     if temp[0] != '':
         pc.delete(temp)
 
     # get all joints in chain
     IK = chUL.listHierarchy(IK[0])
     FK = chUL.listHierarchy(FK[0])
-    list = chUL.findJointArray(shoulderJoint, wristJoint)
+    list = chUL.findJointArray(shoulder_joint, wrist_joint)
 
     pc.select(cl=True)
 
     # create controls
-    wristCtrl = cuUL.curveControl('cube1', 'joint', controlColor)
+    wristCtrl = cuUL.curveControl('cube1', 'joint', control_color)
     wristCtrl[0] = pc.rename(wristCtrl[0], name + side + 'ik_wrist_ctrl')
-    elbowCtrl = cuUL.curveControl('cone', 'curve', controlColor)
+    elbowCtrl = cuUL.curveControl('cone', 'curve', control_color)
     elbowCtrl[0] = pc.rename(elbowCtrl[0], name + side + 'ik_elbow_ctrl')
-    switchCtrl = cuUL.curveControl('pin1', 'curve', controlColor)
+    switchCtrl = cuUL.curveControl('pin1', 'curve', control_color)
     switchCtrl[0] = pc.rename(switchCtrl[0], name + side + 'armSwitches_ctrl')
 
     # snap controls to respective joints
-    tr.Snap(wristJoint, wristCtrl[0])
+    tr.Snap(wrist_joint, wristCtrl[0])
     pc.makeIdentity(wristCtrl[0], apply=True, t=1, r=1, s=1)
-    tr.Snap(wristJoint, switchCtrl[0])
+    tr.Snap(wrist_joint, switchCtrl[0])
     pc.setAttr((switchCtrl[0] + '.r'), (0, 0, 0))
     pc.select(cl=True)
 
-    pc.parent(wristCtrl[0], partGrp)
-    pc.parent(elbowCtrl[0], partGrp)
-    pc.parent(switchCtrl[0], partGrp)
+    pc.parent(wristCtrl[0], part_grp)
+    pc.parent(elbowCtrl[0], part_grp)
+    pc.parent(switchCtrl[0], part_grp)
 
-    pc.parentConstraint(wristJoint, switchCtrl[0], mo=True, weight=1)
+    pc.parentConstraint(wrist_joint, switchCtrl[0], mo=True, weight=1)
     chUL.lockAndHide(switchCtrl[0], 'locknHide', 'trans rot scale vis')
 
     # get middle index of ik joint for pole control placement
     middleIndex = len(IK) / 2
-    modPos = chUL.zoofindPolePosition(shoulderJoint, IK[middleIndex], wristJoint, 0.7)
+    modPos = chUL.zoofindPolePosition(shoulder_joint, IK[middleIndex], wrist_joint, 0.7)
     pc.select(elbowCtrl[0], r=True)
     pc.setAttr((elbowCtrl[0] + '.t'), (modPos[0], modPos[1], modPos[2]))
     cuUL.fixFacingAxis('Z', 0)
     pc.select(cl=True)
 
     # create ik fk connections from given array
-    chUL.fkIkConnect(list, IK, FK, ikFkType, switchCtrl[0])
+    chUL.fkIkConnect(list, IK, FK, ik_fk_type, switchCtrl[0])
     pc.select(cl=True)
 
     # fk controllers and rename them respectively
-    fkCon = chUL.fkControl(FK[0], 'circleCross', 1, controlColor)
+    fkCon = chUL.fkControl(FK[0], 'circleCross', 1, control_color)
     fkContrlList = chUL.listHierarchy(fkCon[0])
 
     for f in fkContrlList:
@@ -116,42 +116,42 @@ def buildArmSetup(name,
 
     # check stretch condition and create connections
     if stretch == 1:
-        js.stretchNetwork(name, side, ('ik_' + shoulderJoint), ('ik_' + wristJoint), wristCtrl[0], stretchType, midLock,
+        js.stretchNetwork(name, side, ('ik_' + shoulder_joint), ('ik_' + wrist_joint), wristCtrl[0], stretch_type, mid_lock,
                           elbowCtrl[0])
-        chUL.stretchTypeConnect(list, IK, FK, stretchType, switchCtrl[0])
+        chUL.stretchTypeConnect(list, IK, FK, stretch_type, switchCtrl[0])
 
     # creating twist joint setup if attribute exists on given joint
     size = len(list) - 1
     twistJoints = []
     sknJoints = []
-    wristRots = pc.listRelatives(wristJoint, parent=True)
+    wristRots = pc.listRelatives(wrist_joint, parent=True)
     for i in range(size):
         if list[i] == wristRots[0]:
             twistJoints = btjs.buildTwistJointSetup(name,
                                                     side,
                                                     list[i],
-                                                    stretchType,
-                                                    ikFkType,
+                                                    stretch_type,
+                                                    ik_fk_type,
                                                     'child',
-                                                    wristJoint,
+                                                    wrist_joint,
                                                     switchCtrl[0],
                                                     stretch,
                                                     volume,
                                                     scale,
-                                                    controlColor)
+                                                    control_color)
         else:
             twistJoints = btjs.buildTwistJointSetup(name,
                                                     side,
                                                     list[i],
-                                                    stretchType,
-                                                    ikFkType,
+                                                    stretch_type,
+                                                    ik_fk_type,
                                                     'parent',
-                                                    wristJoint,
+                                                    wrist_joint,
                                                     switchCtrl[0],
                                                     stretch,
                                                     volume,
                                                     scale,
-                                                    controlColor)
+                                                    control_color)
         sknJoints.extend(twistJoints)
 
     # create ik handle for ik joint chain
@@ -165,16 +165,16 @@ def buildArmSetup(name,
     # create pole vector constraint for ikhandle
     pc.poleVectorConstraint(elbowCtrl[0], ikHandle[0])
     # parentConstraint -mo -skipTranslate x -skipTranslate y -skipTranslate z -weight 1 wristCtrl[0] ('ik_' + wristJoint)
-    stretchAxis = chUL.getStretchAxis(wristJoint, 'translate')
+    stretchAxis = chUL.getStretchAxis(wrist_joint, 'translate')
     pc.select(cl=True)
-    tempJoint = cuUL.curveControl('joint', 'curve', controlColor)
-    tempJoint[0] = pc.rename(tempJoint[0], 'ik_' + wristJoint + 'RotHelp')
-    tr.Snap(('ik_' + wristJoint), tempJoint[0])
+    tempJoint = cuUL.curveControl('joint', 'curve', control_color)
+    tempJoint[0] = pc.rename(tempJoint[0], 'ik_' + wrist_joint + 'RotHelp')
+    tr.Snap(('ik_' + wrist_joint), tempJoint[0])
     pc.makeIdentity(tempJoint[0], apply=True, t=1, r=1, s=1)
-    rad = pc.getAttr(wristJoint + '.radius')
-    val = pc.getAttr(wristJoint + '.' + stretchAxis[0])
+    rad = pc.getAttr(wrist_joint + '.radius')
+    val = pc.getAttr(wrist_joint + '.' + stretchAxis[0])
     pc.setAttr((tempJoint[0] + '.radius'), rad)
-    pc.parent(tempJoint[0], ('ik_' + wristJoint))
+    pc.parent(tempJoint[0], ('ik_' + wrist_joint))
     # print(tempJoint[99])
     if val < 0.00001:
         if stretchAxis[0] == 'tx':
@@ -232,22 +232,22 @@ def buildArmSetup(name,
     chUL.lockAndHide(wristCtrl[0], 'locknHide', 'scale vis')
     chUL.lockAndHide(elbowCtrl[0], 'locknHide', 'rot scale vis')
 
-    if stretchType == 'translate':
+    if stretch_type == 'translate':
         for f in fkContrlList:
             chUL.lockAndHide(f, 'locknHide', 'scale vis')
 
-    if stretchType == 'scale':
+    if stretch_type == 'scale':
         for f in fkContrlList:
             chUL.lockAndHide(f, 'locknHide', 'trans vis')
 
     # building clavicle setup
-    parentJoint = pc.listRelatives(shoulderJoint, parent=True)
+    parentJoint = pc.listRelatives(shoulder_joint, parent=True)
     if parentJoint[0] != '':
-        buildClavSetup(name, side, parentJoint[0], shoulderJoint, stretch, scale, controlColor)
+        buildClavSetup(name, side, parentJoint[0], shoulder_joint, stretch, scale, control_color)
 
     parentGrp = pc.listRelatives(fkContrlList[0], parent=True)
     chUL.lockAndHide(parentGrp[0], 'unLock', 'trans rot')
-    pc.parent(parentGrp[0], partGrp)
+    pc.parent(parentGrp[0], part_grp)
 
     if parentJoint[0] != '':
         pc.parentConstraint(parentJoint[0], parentGrp[0], mo=True, weight=1)
@@ -278,7 +278,7 @@ def buildArmSetup(name,
 
     # parent skeleton
     pc.select(cl=True)
-    chUL.parentSkeletonTo(parentJoint[0], cleanGrp[1])
+    chUL.parentSkeletonTo(parentJoint[0], clean_grp[1])
 
     # create skinJoint set
     set = chUL.createSkinJointSet(name)
